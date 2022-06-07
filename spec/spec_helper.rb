@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-module RegisterIngesterOc
-  UNITTEST = 1
+unless ENV['TEST'].to_i == 1
+  raise 'not test env!'
 end
 
 require "register_ingester_oc"
