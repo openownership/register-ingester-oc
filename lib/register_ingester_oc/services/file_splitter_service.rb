@@ -10,13 +10,14 @@ module RegisterIngesterOc
         @writer = writer
       end
 
-      def split_stream(stream, max_lines: DEFAULT_LINES_PER_FILE)
+      def split_stream(stream, split_size: DEFAULT_LINES_PER_FILE, max_lines: nil)
         file_index = 0
 
         Dir.mktmpdir do |dir|
           file_path = File.join(dir, "file-#{file_index}")
           current_file = writer.open_file(file_path)
           current_row_count = 0
+          total_row_count = 0
 
           stream.each do |line|
             # Write line to open file
@@ -24,9 +25,10 @@ module RegisterIngesterOc
 
             # Increment row count
             current_row_count += 1
+            total_row_count += 1
 
             # Check whether our target of lines is met
-            next unless current_row_count >= max_lines
+            next unless (current_row_count >= split_size) || (max_lines && (total_row_count >= max_lines))
 
             # Since line count target exceeded close file and yield to user
             writer.close_file(current_file)
@@ -40,10 +42,12 @@ module RegisterIngesterOc
             file_path = File.join(dir, "file-#{file_index}")
             current_file = writer.open_file(file_path)
             current_row_count = 0
+
+            break if max_lines && (total_row_count >= max_lines)
           end
 
           writer.close_file(current_file)
-          if current_row_count >= max_lines
+          if current_row_count > 0
             yield file_path
             file_index += 1
           end

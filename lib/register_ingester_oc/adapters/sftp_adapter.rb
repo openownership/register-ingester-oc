@@ -8,6 +8,14 @@ module RegisterIngesterOc
           sftp.download!(rem_path, dst_path)
         end
       end
+
+      def remote_file_stream(host:, username:, password:, rem_path:)
+        Net::SFTP.start(host, username, password: password) do |sftp|
+          sftp.file.open(rem_path, "r") do |stream|
+            yield stream
+          end
+        end
+      end
     end
   end
 end

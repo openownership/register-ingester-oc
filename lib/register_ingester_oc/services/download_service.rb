@@ -27,6 +27,17 @@ module RegisterIngesterOc
         )
       end
 
+      def remote_file_stream(month, &block) # 2022_05
+        rem_path = File.join('/', month, filename)
+        sftp_adapter.remote_file_stream(
+          host: settings.OC_HOST,
+          username: settings.OC_USERNAME,
+          password: settings.OC_PASSWORD,
+          rem_path: rem_path,
+          &block
+        )
+      end
+
       private
 
       attr_reader :sftp_adapter, :filename, :settings

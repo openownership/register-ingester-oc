@@ -14,7 +14,7 @@ RSpec.describe RegisterIngesterOc::Services::FileSplitterService do
       stream = StringIO.new(content)
 
       file_count = 0
-      subject.split_stream(stream, max_lines: 100) do |file_path|
+      subject.split_stream(stream, split_size: 100) do |file_path|
         result = File.open(file_path) do |stream|
           gzip_reader.open_stream(stream) { |unzipped| unzipped.read }
         end

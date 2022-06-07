@@ -1,17 +1,18 @@
 #!/usr/bin/env ruby
 
-# require 'register_ingester_oc/services/download_service'
+require 'register_ingester_oc/services/download_service'
 require 'register_ingester_oc/services/oc_splitter_service'
 
-# local_path = '/tmp/something'
-local_path = './spec/resources/sample_file.gz'
 oc_month = '2022_05'
 
-# RegisterIngesterOc::Services::DownloadService.new(
-#   filename: 'md5sum.txt'  
-# ).download(oc_month, local_path)
+download_service = RegisterIngesterOc::Services::DownloadService.new
 
-RegisterIngesterOc::Services::OcSplitterService.new.split_file(
-  local_path,
-  s3_bucket: 'oo-register-dev',
-  s3_prefix: "oc-bulk-uploads/mth=#{oc_month}", max_lines: 1)
+download_service.remote_file_stream(oc_month) do |stream|
+  RegisterIngesterOc::Services::OcSplitterService.new.split_file(
+    stream,
+    s3_bucket: 'oo-register-dev',
+    s3_prefix: "oc-bulk-uploads/mth2=#{oc_month}",
+    split_size: 10_000,
+    max_lines: 500_000
+  )
+end
