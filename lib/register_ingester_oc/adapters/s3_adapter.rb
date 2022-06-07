@@ -1,4 +1,5 @@
 require 'aws-sdk-s3'
+require 'register_ingester_oc/config/settings'
 
 module RegisterIngesterOc
   module Adapters
@@ -7,11 +8,11 @@ module RegisterIngesterOc
         NoSuchKey = Class.new(StandardError)
       end
 
-      def initialize(region:, access_key_id:, secret_access_key:)
+      def initialize(credentials: Config::AWS_CREDENTIALS)
         @s3_client = Aws::S3::Client.new(
-          region: region,
-          access_key_id: access_key_id,
-          secret_access_key: secret_access_key,
+          region: credentials.AWS_REGION,
+          access_key_id: credentials.AWS_ACCESS_KEY_ID,
+          secret_access_key: credentials.AWS_SECRET_ACCESS_KEY
         )
       end
 

@@ -32,6 +32,9 @@ module RegisterIngesterOc
             writer.close_file(current_file)
             yield file_path
 
+            # Remove file once processed
+            File.delete file_path
+
             # Open new file ready for next lines
             file_index += 1
             file_path = File.join(dir, "file-#{file_index}")
