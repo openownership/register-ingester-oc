@@ -1,7 +1,17 @@
 #!/usr/bin/env ruby
 
-require 'register_ingester_oc/services/download_service'
+# require 'register_ingester_oc/services/download_service'
+require 'register_ingester_oc/services/oc_splitter_service'
 
-RegisterIngesterOc::Services::DownloadService.new(
-  filename: 'md5sum.txt'  
-).download('2022_05', '/tmp/something')
+# local_path = '/tmp/something'
+local_path = './spec/resources/sample_file.gz'
+oc_month = '2022_05'
+
+# RegisterIngesterOc::Services::DownloadService.new(
+#   filename: 'md5sum.txt'  
+# ).download(oc_month, local_path)
+
+RegisterIngesterOc::Services::OcSplitterService.new.split_file(
+  local_path,
+  s3_bucket: 'oo-register-dev',
+  s3_prefix: "oc-bulk-uploads/mth=#{oc_month}", max_lines: 1)

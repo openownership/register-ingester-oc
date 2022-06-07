@@ -19,9 +19,10 @@ module RegisterIngesterOc
 
       def split_file(file_path, s3_bucket:, s3_prefix:, max_lines: DEFAULT_LINES_PER_FILE)
         File.open(file_path) do |stream|
-          subject.open_stream(stream) do |unzipped_stream|
+          gzip_reader.open_stream(stream) do |unzipped_stream|
             file_index = 0
-            file_splitter_service.split_stream(stream, max_lines: max_lines) do |split_file_path|
+            file_splitter_service.split_stream(unzipped_stream, max_lines: max_lines) do |split_file_path|
+              print "DEALING WITH PATH ", split_file_path, "\n"
               s3_path = File.join(s3_prefix, "file-#{file_index}.csv.gz")
               s3_adapter.upload_to_s3(s3_bucket: s3_bucket, s3_path: s3_path, local_path: split_file_path)
               file_index += 1
