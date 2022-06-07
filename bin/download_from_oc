@@ -1,0 +1,7 @@
+#!/usr/bin/env ruby
+
+require 'register_ingester_oc/services/download_service'
+
+RegisterIngesterOc::Services::DownloadService.new(
+  filename: 'md5sum.txt'  
+).download('2022_05', '/tmp/something')
