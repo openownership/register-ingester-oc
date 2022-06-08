@@ -3,7 +3,7 @@ require 'register_ingester_oc/config/settings'
 
 module RegisterIngesterOc
   module Services
-    class IngestIntoTablesService
+    class ConversionService
       def initialize(
         athena_adapter: Config::Adapters::ATHENA_ADAPTER,
         athena_database: ENV.fetch('ATHENA_DATABASE'),
@@ -30,48 +30,7 @@ module RegisterIngesterOc
       def create_raw_data_table(table_name, s3_prefix)
         query = <<~SQL
           CREATE EXTERNAL TABLE #{table_name} (
-            company_number STRING,
-            jurisdiction_code STRING,
-            name STRING,
-            normalised_name STRING,
-            company_type STRING,
-            nonprofit STRING,
-            current_status STRING,
-            incorporation_date STRING,
-            dissolution_date STRING,
-            branch STRING,
-            business_number STRING,
-            current_alternative_legal_name STRING,
-            current_alternative_legal_name_language STRING,
-            home_jurisdiction_text STRING,
-            native_company_number STRING,
-            previous_names STRING,
-            alternative_names STRING,
-            retrieved_at STRING,
-            registry_url STRING,
-            restricted_for_marketing STRING,
-            inactive STRING,
-            accounts_next_due STRING,
-            accounts_reference_date STRING,
-            accounts_last_made_up_date STRING,
-            annual_return_next_due STRING,
-            annual_return_last_made_up_date STRING,
-            has_been_liquidated STRING,
-            has_insolvency_history STRING,
-            has_charges STRING,
-            `registered_address.street_address` STRING,
-            `registered_address.locality` STRING,
-            `registered_address.region` STRING,
-            `registered_address.postal_code` STRING,
-            `registered_address.country` STRING,
-            `registered_address.in_full` STRING,
-            home_jurisdiction_code STRING,
-            home_jurisdiction_company_number STRING,
-            industry_code_uids STRING,
-            latest_accounts_date STRING,
-            latest_accounts_cash STRING,
-            latest_accounts_assets STRING,
-            latest_accounts_liabilities STRING
+            #{schemas}
           )
             PARTITIONED BY (`mth` STRING, `part` STRING)
             ROW FORMAT SERDE 'org.apache.hadoop.hive.serde2.OpenCSVSerde'
@@ -95,48 +54,7 @@ module RegisterIngesterOc
       def create_processed_table(table_name, s3_prefix)
         query = <<~SQL
           CREATE EXTERNAL TABLE IF NOT EXISTS `#{table_name}` (
-            company_number STRING,
-            jurisdiction_code STRING,
-            name STRING,
-            normalised_name STRING,
-            company_type STRING,
-            nonprofit STRING,
-            current_status STRING,
-            incorporation_date STRING,
-            dissolution_date STRING,
-            branch STRING,
-            business_number STRING,
-            current_alternative_legal_name STRING,
-            current_alternative_legal_name_language STRING,
-            home_jurisdiction_text STRING,
-            native_company_number STRING,
-            previous_names STRING,
-            alternative_names STRING,
-            retrieved_at STRING,
-            registry_url STRING,
-            restricted_for_marketing STRING,
-            inactive STRING,
-            accounts_next_due STRING,
-            accounts_reference_date STRING,
-            accounts_last_made_up_date STRING,
-            annual_return_next_due STRING,
-            annual_return_last_made_up_date STRING,
-            has_been_liquidated STRING,
-            has_insolvency_history STRING,
-            has_charges STRING,
-            `registered_address.street_address` STRING,
-            `registered_address.locality` STRING,
-            `registered_address.region` STRING,
-            `registered_address.postal_code` STRING,
-            `registered_address.country` STRING,
-            `registered_address.in_full` STRING,
-            home_jurisdiction_code STRING,
-            home_jurisdiction_company_number STRING,
-            industry_code_uids STRING,
-            latest_accounts_date STRING,
-            latest_accounts_cash STRING,
-            latest_accounts_assets STRING,
-            latest_accounts_liabilities STRING
+            #{schemas}
           )
           PARTITIONED BY (`mth` STRING, `part` STRING)
           ROW FORMAT SERDE 
@@ -149,6 +67,53 @@ module RegisterIngesterOc
           TBLPROPERTIES (
             'has_encrypted_data'='false', 
             'parquet.compression'='GZIP');
+        SQL
+      end
+
+      def schemas
+        <<~SQL
+          company_number STRING,
+          jurisdiction_code STRING,
+          name STRING,
+          normalised_name STRING,
+          company_type STRING,
+          nonprofit STRING,
+          current_status STRING,
+          incorporation_date STRING,
+          dissolution_date STRING,
+          branch STRING,
+          business_number STRING,
+          current_alternative_legal_name STRING,
+          current_alternative_legal_name_language STRING,
+          home_jurisdiction_text STRING,
+          native_company_number STRING,
+          previous_names STRING,
+          alternative_names STRING,
+          retrieved_at STRING,
+          registry_url STRING,
+          restricted_for_marketing STRING,
+          inactive STRING,
+          accounts_next_due STRING,
+          accounts_reference_date STRING,
+          accounts_last_made_up_date STRING,
+          annual_return_next_due STRING,
+          annual_return_last_made_up_date STRING,
+          has_been_liquidated STRING,
+          has_insolvency_history STRING,
+          has_charges STRING,
+          `registered_address.street_address` STRING,
+          `registered_address.locality` STRING,
+          `registered_address.region` STRING,
+          `registered_address.postal_code` STRING,
+          `registered_address.country` STRING,
+          `registered_address.in_full` STRING,
+          home_jurisdiction_code STRING,
+          home_jurisdiction_company_number STRING,
+          industry_code_uids STRING,
+          latest_accounts_date STRING,
+          latest_accounts_cash STRING,
+          latest_accounts_assets STRING,
+          latest_accounts_liabilities STRING
         SQL
       end
 
