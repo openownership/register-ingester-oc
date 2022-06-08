@@ -1,3 +1,4 @@
+require 'stringio'
 require 'tmpdir'
 require 'register_ingester_oc/utils/gzip_writer'
 
@@ -15,7 +16,7 @@ module RegisterIngesterOc
 
         Dir.mktmpdir do |dir|
           file_path = File.join(dir, "file-#{file_index}")
-          current_file = writer.open_file(file_path)
+          current_file = writer.open_stream(StringIO.new)
           current_row_count = 0
           total_row_count = 0
 
@@ -31,7 +32,8 @@ module RegisterIngesterOc
             next unless (current_row_count >= split_size) || (max_lines && (total_row_count >= max_lines))
 
             # Since line count target exceeded close file and yield to user
-            writer.close_file(current_file)
+            result = writer.close_stream(current_file)
+            File.open(file_path, 'wb') { |f| f.write result }
             yield file_path
 
             # Remove file once processed
@@ -40,13 +42,14 @@ module RegisterIngesterOc
             # Open new file ready for next lines
             file_index += 1
             file_path = File.join(dir, "file-#{file_index}")
-            current_file = writer.open_file(file_path)
+            current_file = writer.open_stream(StringIO.new)
             current_row_count = 0
 
             break if max_lines && (total_row_count >= max_lines)
           end
 
-          writer.close_file(current_file)
+          result = writer.close_stream(current_file)
+          File.open(file_path, 'wb') { |f| f.write result }
           if current_row_count > 0
             yield file_path
             file_index += 1
