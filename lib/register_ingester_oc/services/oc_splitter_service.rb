@@ -22,7 +22,7 @@ module RegisterIngesterOc
           file_index = 0
           file_splitter_service.split_stream(unzipped_stream, split_size: split_size, max_lines: max_lines) do |split_file_path|
             print "DEALING WITH PATH ", split_file_path, "\n"
-            s3_path = File.join(s3_prefix, "file-#{file_index}.csv.gz")
+            s3_path = File.join(s3_prefix, "part=part#{file_index}", "file-#{file_index}.csv.gz")
             s3_adapter.upload_to_s3(s3_bucket: s3_bucket, s3_path: s3_path, local_path: split_file_path)
             file_index += 1
           end
