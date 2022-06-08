@@ -6,8 +6,15 @@ require 'register_ingester_oc/services/oc_splitter_service'
 oc_month = '2022_05'
 
 download_service = RegisterIngesterOc::Services::DownloadService.new
+dst_path = '/tmp/companies_file'
 
-download_service.remote_file_stream(oc_month) do |stream|
+print "DOWNLOADING #{Time.now}\n"
+download_service.download(oc_month, dst_path)
+
+print "DOWNLOADED #{Time.now}\n"
+
+File.open(dst_path, 'rb') do |stream|
+  # download_service.remote_file_stream(oc_month) do |stream|
   RegisterIngesterOc::Services::OcSplitterService.new.split_file(
     stream,
     s3_bucket: 'oo-register-dev',
