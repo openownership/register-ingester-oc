@@ -41,7 +41,7 @@ module RegisterIngesterOc
 
       def create_raw_data_table
         query = <<~SQL
-          CREATE EXTERNAL TABLE #{raw_table_name} (
+          CREATE EXTERNAL TABLE IF NOT EXISTS #{raw_table_name} (
             #{schemas}
           )
             PARTITIONED BY (`mth` STRING, `part` STRING)
@@ -73,7 +73,7 @@ module RegisterIngesterOc
 
       def create_filtered_table
         query = <<~SQL
-          CREATE EXTERNAL TABLE `#{filtered_table_name}` (
+          CREATE EXTERNAL TABLE IF NOT EXISTS `#{filtered_table_name}` (
             company_number STRING,
             name STRING,
             company_type STRING,
