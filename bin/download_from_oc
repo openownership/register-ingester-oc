@@ -1,25 +1,15 @@
 #!/usr/bin/env ruby
 
 require 'register_ingester_oc/services/download_service'
-require 'register_ingester_oc/services/oc_splitter_service'
 
-oc_month = '2022_05'
+oc_month = ARGV[0] # '2022_05'
+dst_folder = ARGV[1] # '/tmp/companies_file'
+
+dst_path = File.join(dst_folder, "#{oc_month}_companies.csv.gz")
 
 download_service = RegisterIngesterOc::Services::DownloadService.new
-dst_path = '/tmp/companies_file'
 
-print "DOWNLOADING #{Time.now}\n"
+print "DOWNLOADING #{Time.now} to #{dst_path}\n"
 download_service.download(oc_month, dst_path)
 
-print "DOWNLOADED #{Time.now}\n"
-
-File.open(dst_path, 'rb') do |stream|
-  # download_service.remote_file_stream(oc_month) do |stream|
-  RegisterIngesterOc::Services::OcSplitterService.new.split_file(
-    stream,
-    s3_bucket: 'oo-register-dev',
-    s3_prefix: "oc-bulk-uploads/mth2=#{oc_month}",
-    split_size: 10_000,
-    max_lines: 500_000
-  )
-end
+print "DOWNLOADED #{Time.now} to #{dst_path}\n"

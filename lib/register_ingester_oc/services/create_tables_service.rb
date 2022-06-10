@@ -3,16 +3,17 @@ require 'register_ingester_oc/config/settings'
 
 module RegisterIngesterOc
   module Services
-    class ConversionService
-      DEFAULT_JURISDICTION_CODES = ['gb', 'dk', 'sk']
-
+    class CreateTablesService
       def initialize(
         athena_adapter: Config::Adapters::ATHENA_ADAPTER,
         athena_database: ENV.fetch('ATHENA_DATABASE'),
         s3_bucket: ENV.fetch('ATHENA_S3_BUCKET'),
         raw_table_name: ENV.fetch('ATHENA_RAW_TABLE_NAME'),
         processed_table_name: ENV.fetch('ATHENA_PROCESSED_TABLE_NAME'),
-        filtered_table_name: ENV.fetch('ATHENA_FILTERED_TABLE_NAME')
+        filtered_table_name: ENV.fetch('ATHENA_FILTERED_TABLE_NAME'),
+        bulk_data_s3_prefix: ENV.fetch('BULK_DATA_S3_PREFIX'),
+        processed_s3_location: ENV.fetch('PROCESSED_S3_LOCATION'),
+        filtered_s3_location: ENV.fetch('FILTERED_S3_LOCATION')
       )
         @athena_adapter = athena_adapter
         @athena_database = athena_database
@@ -21,47 +22,38 @@ module RegisterIngesterOc
         @raw_table_name = raw_table_name
         @processed_table_name = processed_table_name
         @filtered_table_name = filtered_table_name
+        @bulk_data_s3_location = "s3://#{s3_bucket}/#{bulk_data_s3_prefix}"
+        @processed_s3_location = processed_s3_location
+        @filtered_s3_location = filtered_s3_location
       end
 
-      def call(month, jurisdiction_codes: DEFAULT_JURISDICTION_CODES)
-        # Detect partitions (eg our new months data)
-        discover_partitions(raw_table_name)
-
-        # Perform bulk transformation step
-        insert_new_data(raw_table_name, processed_table_name, month)
-
-        # Create filtered data
-        filter_data(processed_table_name, filtered_table_name, month, jurisdiction_codes)
+      def call
+        create_raw_data_table
+        create_processed_table
+        create_filtered_table
       end
 
       private
 
       attr_reader :athena_adapter, :athena_database, :s3_bucket, :output_location
       attr_reader :raw_table_name, :processed_table_name, :filtered_table_name
+      attr_reader :bulk_data_s3_location, :processed_s3_location, :filtered_s3_location
 
-      def create_raw_data_table(table_name, s3_prefix)
+      def create_raw_data_table
         query = <<~SQL
-          CREATE EXTERNAL TABLE #{table_name} (
+          CREATE EXTERNAL TABLE #{raw_table_name} (
             #{schemas}
           )
             PARTITIONED BY (`mth` STRING, `part` STRING)
             ROW FORMAT SERDE 'org.apache.hadoop.hive.serde2.OpenCSVSerde'
-            LOCATION '#{s3_prefix}';
-          -- TBLPROPERTIES ("skip.header.line.count"="1");
+            LOCATION '#{bulk_data_s3_location}';
         SQL
         execute_sql query
       end
 
-      def discover_partitions(table_name)
+      def create_processed_table
         query = <<~SQL
-          MSCK REPAIR TABLE #{table_name}
-        SQL
-        execute_sql query
-      end
-
-      def create_processed_table(table_name, s3_prefix)
-        query = <<~SQL
-          CREATE EXTERNAL TABLE IF NOT EXISTS `#{table_name}` (
+          CREATE EXTERNAL TABLE IF NOT EXISTS `#{processed_table_name}` (
             #{schemas}
           )
           PARTITIONED BY (`mth` STRING, `part` STRING)
@@ -71,7 +63,7 @@ module RegisterIngesterOc
             'org.apache.hadoop.hive.ql.io.parquet.MapredParquetInputFormat' 
           OUTPUTFORMAT 
             'org.apache.hadoop.hive.ql.io.parquet.MapredParquetOutputFormat'
-          LOCATION '#{s3_prefix}'
+          LOCATION '#{processed_s3_location}'
           TBLPROPERTIES (
             'has_encrypted_data'='false', 
             'parquet.compression'='GZIP');
@@ -79,18 +71,9 @@ module RegisterIngesterOc
         execute_sql query
       end
 
-      def insert_new_data(src_table_name, dst_table_name, month)
+      def create_filtered_table
         query = <<~SQL
-          INSERT INTO #{dst_table_name}
-          SELECT * FROM #{src_table_name}
-          WHERE mth = '#{month}';
-        SQL
-        execute_sql query
-      end
-
-      def create_filtered_table(table_name, s3_prefix)
-        query = <<~SQL
-          CREATE EXTERNAL TABLE `#{table_name}` (
+          CREATE EXTERNAL TABLE `#{filtered_table_name}` (
             company_number STRING,
             name STRING,
             company_type STRING,
@@ -106,33 +89,11 @@ module RegisterIngesterOc
             'org.apache.hadoop.hive.ql.io.parquet.MapredParquetInputFormat' 
           OUTPUTFORMAT 
             'org.apache.hadoop.hive.ql.io.parquet.MapredParquetOutputFormat'
-          LOCATION '#{s3_prefix}'
+          LOCATION '#{filtered_s3_location}'
           TBLPROPERTIES (
             'has_encrypted_data'='false', 
             'parquet.compression'='GZIP');
         SQL
-        execute_sql query
-      end
-
-      def filter_data(src_table_name, dst_table_name, month, jurisdiction_codes)
-        jurisdiction_codes_list = jurisdiction_codes.map { |code| "'#{code}'" }.join(", ")
-
-        query = <<~SQL
-          INSERT INTO #{dst_table_name}
-          SELECT
-            company_number,
-            name,
-            company_type,
-            incorporation_date,
-            dissolution_date,
-            restricted_for_marketing,
-            "registered_address.in_full",
-            mth,
-            jurisdiction_code
-          FROM #{src_table_name}
-          WHERE mth = '#{month}' AND jurisdiction_code IN (#{jurisdiction_codes_list});
-        SQL
-
         execute_sql query
       end
 

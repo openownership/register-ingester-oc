@@ -1,0 +1,9 @@
+#!/usr/bin/env ruby
+
+require 'register_ingester_oc/services/conversion_service'
+
+# oc_month = ARGV[0] # '2022_05'
+
+conversion_service = RegisterIngesterOc::Services::ConversionService.new
+
+conversion_service.call '202205'

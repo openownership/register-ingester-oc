@@ -1,0 +1,7 @@
+#!/usr/bin/env ruby
+
+require 'register_ingester_oc/services/create_tables_service'
+
+create_tables_service = RegisterIngesterOc::Services::CreateTablesService.new
+
+create_tables_service.call
