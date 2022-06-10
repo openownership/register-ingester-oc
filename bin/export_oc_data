@@ -1,0 +1,9 @@
+#!/usr/bin/env ruby
+
+require 'register_ingester_oc/services/exporter_service'
+
+oc_month = ARGV[0] # '202205'
+
+exporter_service = RegisterIngesterOc::Services::ExporterService.new
+
+exporter_service.call oc_month

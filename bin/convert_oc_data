@@ -2,8 +2,8 @@
 
 require 'register_ingester_oc/services/conversion_service'
 
-# oc_month = ARGV[0] # '2022_05'
+oc_month = ARGV[0] # '202205'
 
 conversion_service = RegisterIngesterOc::Services::ConversionService.new
 
-conversion_service.call '202205'
+conversion_service.call oc_month
