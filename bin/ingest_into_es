@@ -1,0 +1,15 @@
+#!/usr/bin/env ruby
+
+require 'register_ingester_oc/config/elasticsearch'
+
+s3_bucket = 'oo-register-dev'
+s3_path = 'oc_exports/diffs3/mth=202205/20220610_084833_00056_fvc9p_bucket-00000.gz'
+
+# require 'register_ingester_oc/config/elasticsearch'
+
+require 'register_ingester_oc/services/company_importer'
+importer_service = RegisterIngesterOc::Services::CompanyImporter.new(
+  company_repository: nil
+)
+
+importer_service.import_from_s3(s3_bucket: s3_bucket, s3_path: s3_path, file_format: 'json')
