@@ -32,7 +32,14 @@ module RegisterIngesterOc
         s3_client.put_object(bucket: s3_bucket, key: s3_path, body: stream)
       rescue Aws::S3::Errors::NoSuchKey, Aws::S3::Errors::NotFound
         raise Errors::NoSuchKey
-      end        
+      end     
+      
+      def list_objects(s3_bucket:, s3_prefix:)
+        s3_client.list_objects({
+          bucket: s3_bucket,
+          prefix: s3_prefix
+        }).contents.map(&:key)
+      end
 
       private
 

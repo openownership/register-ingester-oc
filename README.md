@@ -53,3 +53,15 @@ bundle exec bin/convert_oc_data 202205
 ```shell
 bundle exec bin/export_oc_data 202205
 ```
+
+### 8. Ingest S3 exported files into Elasticsearch
+
+To import the full data for a month:
+```shell
+bundle exec bin/ingest_into_es 202205 full
+```
+
+Otherwise, to import the diffs for a month:
+```shell
+bundle exec bin/ingest_into_es 202205 diff
+```

@@ -1,15 +1,52 @@
 #!/usr/bin/env ruby
 
+oc_month = ARGV[0] # '202205'
+import_type = ARGV[1]
+
 require 'register_ingester_oc/config/elasticsearch'
 
-s3_bucket = 'oo-register-dev'
-s3_path = 'oc_exports/diffs3/mth=202205/20220610_084833_00056_fvc9p_bucket-00000.gz'
+s3_bucket = ENV.fetch('ATHENA_S3_BUCKET')
+s3_prefix_base =
+  case import_type
+  when 'diff'
+    ENV.fetch('EXPORT_JSON_DIFFS_S3_PREFIX')
+  when 'full'
+    ENV.fetch('EXPORT_JSON_FULL_S3_PREFIX')
+  else
+    raise 'unknown import type'
+  end
 
-# require 'register_ingester_oc/config/elasticsearch'
+s3_prefix = File.join(s3_prefix_base, "mth=#{oc_month}")
 
 require 'register_ingester_oc/services/company_file_reader'
 company_file_reader = RegisterIngesterOc::Services::CompanyFileReader.new
 
-company_file_reader.import_from_s3(s3_bucket: s3_bucket, s3_path: s3_path, file_format: 'json') do |records|
-  print records, "\n"
+require 'register_sources_oc/repositories/company_repository'
+company_repository = RegisterSourcesOc::Repositories::CompanyRepository.new(
+  client: RegisterIngesterOc::Config::ELASTICSEARCH_CLIENT
+)
+
+require 'register_ingester_oc/config/adapters'
+
+# Calculate s3 paths to import
+s3_paths = RegisterIngesterOc::Config::Adapters::S3_ADAPTER.list_objects(
+  s3_bucket: s3_bucket,
+  s3_prefix: s3_prefix
+)
+print "IMPORTING S3 Paths:\n#{s3_paths} AT #{Time.now}\n\n"
+
+s3_paths.each do |s3_path|
+  print "STARTED IMPORTING #{s3_path} AT #{Time.now}\n"
+  company_file_reader.import_from_s3(s3_bucket: s3_bucket, s3_path: s3_path, file_format: 'json') do |records|
+    company_repository.store(records)
+  end
+  print "COMPLETED IMPORTING #{s3_path} AT #{Time.now}\n"
 end
+
+print "\n\nINGEST FINISHED AT #{Time.now}\n\n\n"
+
+results = company_repository.search_by_name(
+  jurisdiction_code: 'gb',
+  name: 'car'
+)
+print "results: ", results
