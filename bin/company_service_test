@@ -1,0 +1,35 @@
+#!/usr/bin/env ruby
+
+require 'register_ingester_oc/config/elasticsearch'
+
+require 'register_sources_oc/repositories/company_repository'
+company_repository = RegisterSourcesOc::Repositories::CompanyRepository.new(
+  client: RegisterIngesterOc::Config::ELASTICSEARCH_CLIENT
+)
+
+require 'register_sources_oc/services/bulk_data_company_service'
+bulk_data_company_service = RegisterSourcesOc::Services::BulkDataCompanyService.new(
+  company_repository: company_repository
+)
+
+require 'register_sources_oc/clients/open_corporate_client'
+open_corporate_client = RegisterSourcesOc::Clients::OpenCorporateClient.new_for_imports
+require 'register_sources_oc/services/oc_api_company_service'
+oc_api_company_service = RegisterSourcesOc::Services::OcApiCompanyService.new(
+  open_corporate_client: open_corporate_client
+)
+
+require 'register_sources_oc/services/company_service'
+company_service = RegisterSourcesOc::Services::CompanyService.new(
+  services: [
+    { name: 'bulk_data', service: bulk_data_company_service },
+    { name: 'oc_api', service: open_corporate_client }
+  ],
+  verbose: true
+)
+
+begin
+  print company_service.get_company('gb', 10052726), "\n"
+rescue => e
+  print "ERRORED: #{e}\n"
+end
