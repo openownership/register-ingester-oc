@@ -1,6 +1,6 @@
 GIT
   remote: git@github.com:openownership/register-sources-oc.git
-  revision: c7252fb225bc3733d4e7db5c456f346a7f919efe
+  revision: d306107c84dc10fd83830e00b774bf23aa9e1622
   specs:
     register_sources_oc (0.1.0)
       activesupport (~> 6.1.4.1)
@@ -129,7 +129,7 @@ GEM
     ice_nine (0.11.2)
     iso8601 (0.13.0)
     jmespath (1.6.1)
-    minitest (5.15.0)
+    minitest (5.16.0)
     multi_json (1.15.0)
     multipart-post (2.2.3)
     net-http-persistent (4.0.1)
@@ -160,7 +160,7 @@ GEM
       addressable (>= 2.8.0)
       crack (>= 0.3.2)
       hashdiff (>= 0.4.0, < 2.0.0)
-    zeitwerk (2.5.4)
+    zeitwerk (2.6.0)
 
 PLATFORMS
   x86_64-linux
