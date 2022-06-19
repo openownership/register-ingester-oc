@@ -1,4 +1,4 @@
-require 'register_sources_oc/structs/company_short'
+require 'register_sources_oc/structs/company'
 
 require 'register_ingester_oc/utils/gzip_reader'
 require 'register_ingester_oc/utils/csv_reader'
@@ -29,7 +29,7 @@ module RegisterIngesterOc
 
         unzipped_stream(stream, zipped: zipped) do |unzipped|
           reader.foreach(unzipped) do |row|
-            yield RegisterSourcesOc::CompanyShort.new(
+            yield RegisterSourcesOc::Company.new(
               company_number: row['company_number'],
               jurisdiction_code: row['jurisdiction_code'],
               name: row['name'],
