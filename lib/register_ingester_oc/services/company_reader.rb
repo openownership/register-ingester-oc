@@ -1,8 +1,10 @@
 require 'register_sources_oc/structs/company'
 
-require 'register_ingester_oc/utils/gzip_reader'
 require 'register_ingester_oc/utils/csv_reader'
 require 'register_ingester_oc/utils/json_reader'
+require 'register_ingester_oc/utils/gzip_reader'
+
+require 'active_support/core_ext/hash/indifferent_access'
 
 module RegisterIngesterOc
   module Services
@@ -18,17 +20,11 @@ module RegisterIngesterOc
       end
 
       def foreach(stream, file_format: 'csv', zipped: true)
-        reader = case file_format
-          when 'json'
-            json_reader
-          when 'csv'
-            csv_reader
-          else
-            raise 'unknown_format'
-          end
+        reader = select_reader file_format
 
         unzipped_stream(stream, zipped: zipped) do |unzipped|
           reader.foreach(unzipped) do |row|
+            row = row.with_indifferent_access
             yield RegisterSourcesOc::Company.new(
               company_number: row['company_number'],
               jurisdiction_code: row['jurisdiction_code'],
@@ -46,6 +42,17 @@ module RegisterIngesterOc
       private
 
       attr_reader :zip_reader, :csv_reader, :json_reader
+
+      def select_reader(file_format)
+        reader = case file_format
+        when 'json'
+          json_reader
+        when 'csv'
+          csv_reader
+        else
+          raise 'unknown_format'
+        end
+      end
 
       def unzipped_stream(stream, zipped: true, &block)
         if zipped
