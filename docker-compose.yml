@@ -1,18 +1,31 @@
 version: '3.7'
 
 services:
-  elasticsearch:
+  register_ingester_es_test:
     image: docker.elastic.co/elasticsearch/elasticsearch-oss:6.6.0
-    volumes:
-      - 'es_ingester_data:/usr/share/elasticsearch/data'
     environment:
       - 'discovery.type=single-node'
       - 'cluster.name=register-elasticsearch'
       - 'bootstrap.memory_lock=true'
       - 'ES_JAVA_OPTS=-Xms512m -Xmx512m'
-    ports:
-      - 9200:9200
-    restart: always
+    networks:
+      - register_ingester_test
+    expose:
+      - 9200
 
-volumes:
-  es_ingester_data:
+  register_ingester_unittests:
+    image: register_ingester_unittests:latest
+    environment:
+      - ELASTICSEARCH_HOST=register_ingester_es_test
+      - ELASTICSEARCH_PASSWORD=
+      - ELASTICSEARCH_PORT=9200
+      - TEST=1
+    links:
+      - register_ingester_es_test
+    networks:
+      - register_ingester_test
+    volumes:
+      - '.:/app'
+
+networks:
+  register_ingester_test:
