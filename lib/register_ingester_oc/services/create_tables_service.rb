@@ -48,7 +48,6 @@ module RegisterIngesterOc
             ROW FORMAT SERDE 'org.apache.hadoop.hive.serde2.OpenCSVSerde'
             LOCATION '#{bulk_data_s3_location}';
         SQL
-        print("DEBUG\n#{query}-----\n")
         execute_sql query
       end
 

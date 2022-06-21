@@ -9,10 +9,12 @@ module RegisterIngesterOc
 
       def initialize(
         reader: CompanyReader.new,
-        s3_adapter: Config::Adapters::S3_ADAPTER
+        s3_adapter: Config::Adapters::S3_ADAPTER,
+        batch_size: BATCH_SIZE
       )
         @reader = reader
         @s3_adapter = s3_adapter
+        @batch_size = batch_size
       end
 
       def import_from_s3(s3_bucket:, s3_path:, file_format: 'csv', zipped: true, &block)
@@ -34,7 +36,7 @@ module RegisterIngesterOc
 
         reader.foreach(stream, file_format: file_format, zipped: zipped) do |record|
           batch_records << record
-          next unless (batch_records.length >= BATCH_SIZE)
+          next unless (batch_records.length >= batch_size)
           yield batch_records
           batch_records = []
         end
@@ -45,7 +47,7 @@ module RegisterIngesterOc
 
       private
 
-      attr_reader :s3_adapter, :reader
+      attr_reader :s3_adapter, :reader, :batch_size
     end
   end
 end
