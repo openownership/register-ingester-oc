@@ -1,21 +1,5 @@
 #!/usr/bin/env ruby
 
-require 'register_ingester_oc/services/oc_splitter_service'
+require 'register_ingester_oc/apps/bulk_data_splitter'
 
-oc_month = ARGV[0] # '2022_05'
-dst_folder = ARGV[1] # '/tmp/companies_file'
-
-dst_path = File.join(dst_folder, "#{oc_month}_companies.csv.gz")
-
-s3_bucket = 'oo-register-dev' # TODO: ENV
-s3_prefix = "oc-bulk-uploads/mth2=#{oc_month}", # TODO: ENV
-
-File.open(dst_path, 'rb') do |stream|
-  RegisterIngesterOc::Services::OcSplitterService.new.split_file(
-    stream,
-    s3_bucket: s3_bucket,
-    s3_prefix: s3_prefix,
-    split_size: 10_000,
-    max_lines: 500_000
-  )
-end
+RegisterIngesterOc::Apps::BulkDataSplitter.bash_call ARGV
