@@ -15,8 +15,8 @@ module RegisterIngesterOc
       end
 
       def initialize(
-        s3_bucket:,
-        s3_prefix:,
+        s3_bucket: ENV.fetch('ATHENA_S3_BUCKET'),
+        s3_prefix: ENV.fetch('BULK_DATA_S3_PREFIX'),
         splitter_service: Services::OcSplitterService.new,
         split_size: DEFAULT_SPLIT_SIZE,
         max_lines: DEFAULT_MAX_LINES
@@ -31,7 +31,7 @@ module RegisterIngesterOc
       def call(month:, local_path:)
         dst_prefix = File.join(s3_prefix, "mth2=#{month}")
 
-        File.open(dst_path, 'rb') do |stream|
+        File.open(local_path, 'rb') do |stream|
           splitter_service.split_file(
             stream,
             s3_bucket: s3_bucket,
