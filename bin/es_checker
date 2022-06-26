@@ -1,0 +1,5 @@
+#!/usr/bin/env ruby
+
+require 'register_ingester_oc/apps/es_checker'
+
+RegisterIngesterOc::Apps::EsChecker.bash_call ARGV
