@@ -46,6 +46,7 @@ module RegisterIngesterOc
           )
             PARTITIONED BY (`mth` STRING, `part` STRING)
             ROW FORMAT SERDE 'org.apache.hadoop.hive.serde2.OpenCSVSerde'
+            WITH SERDEPROPERTIES ("escapeChar"= "¬")
             LOCATION '#{bulk_data_s3_location}';
         SQL
         execute_sql query

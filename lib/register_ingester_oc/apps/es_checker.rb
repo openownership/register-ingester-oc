@@ -1,11 +1,13 @@
 #!/usr/bin/env ruby
 
+require 'json'
+
+require 'register_ingester_oc/config/settings'
 require 'register_sources_oc/repositories/company_repository'
-require 'register_sources_oc/repositories/company_service'
+require 'register_sources_oc/services/company_service'
 
 require 'register_ingester_oc/config/adapters'
 require 'register_ingester_oc/config/elasticsearch'
-require 'register_ingester_oc/config/settings'
 require 'register_ingester_oc/services/company_file_reader'
 
 module RegisterIngesterOc
@@ -22,7 +24,7 @@ module RegisterIngesterOc
         month = args[0]
         import_type = args[1]
 
-        EsIngester.new.call(month: month, import_type: import_type)
+        EsChecker.new.call(month: month, import_type: import_type)
       end
 
       def initialize(
@@ -62,10 +64,10 @@ module RegisterIngesterOc
 
         # Ingest S3 files
         s3_paths.each do |s3_path|
-          print "\nIMPORTING #{s3_path}\n"
-          file_reader.import_from_s3(s3_bucket: s3_bucket, s3_path: s3_path, file_format: 'json') do |records|
-            company_repository.store records
-          end
+          #print "\nIMPORTING #{s3_path}\n"
+          #file_reader.import_from_s3(s3_bucket: s3_bucket, s3_path: s3_path, file_format: 'json') do |records|
+          #  company_repository.store records
+          #end
 
           print "\nCHECKING #{s3_path}\n"
           file_reader.import_from_s3(s3_bucket: s3_bucket, s3_path: s3_path, file_format: 'json') do |records|
@@ -73,7 +75,7 @@ module RegisterIngesterOc
               perform_checks(record)
             end
           end
-          print "\CHECKED #{s3_path}\n"
+          print "\nCHECKED #{s3_path}\n"
         end
 
         print "\n\nCHECKING FINISHED AT #{Time.now}\n\n\n"
@@ -88,19 +90,31 @@ module RegisterIngesterOc
         company_number = record.company_number
         name = record.name
 
-        result = company_service.get_company(jurisdiction_code, company_number)
-        if !result.empty
-          print "get_company jurisdiction_code:#{jurisdiction_code} company_number:#{company_number} result:#{result}\n"
+        results = company_service.get_company(jurisdiction_code, company_number)
+        if !results.empty?
+          results.each do |result|
+            unless (result[:response1].keys.map(&:to_sym) == [:registered_address_in_full]) && (result[:response2].keys.map(&:to_sym) == [:registered_address_in_full])
+              print "get_company jurisdiction_code:#{jurisdiction_code} company_number:#{company_number} result:#{JSON.pretty_generate(result)}\n"
+            end
+          end
         end
 
-        result = company_service.search_companies(jurisdiction_code, company_number)
-        if !result.empty
-          print "search_companies jurisdiction_code:#{jurisdiction_code} company_number:#{company_number} result:#{result}\n"
+        results = company_service.search_companies(jurisdiction_code, company_number)
+        if !results.empty?
+          results.each do |result|
+            unless (result[:response1].keys.map(&:to_sym) == [:registered_address_in_full]) && (result[:response2].keys.map(&:to_sym) == [:registered_address_in_full])
+              print "search_companies jurisdiction_code:#{jurisdiction_code} company_number:#{company_number} result:#{JSON.pretty_generate(result)}\n"
+            end
+          end
         end
 
-        result = company_service.search_companies_by_name(name)
-        if !result.empty
-          print "search_companies_by_name name:#{name} result:#{result}\n"
+        results = company_service.search_companies_by_name(name)
+        if !results.empty?
+          results.each do |result|
+            unless (result[:response1].keys.map(&:to_sym) == [:registered_address_in_full]) && (result[:response2].keys.map(&:to_sym) == [:registered_address_in_full])
+              print "search_companies_by_name name:#{name} result:#{JSON.pretty_generate(result)}\n"
+            end
+          end
         end
       end
     end
