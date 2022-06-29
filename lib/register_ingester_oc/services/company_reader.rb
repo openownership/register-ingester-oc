@@ -5,6 +5,7 @@ require 'register_ingester_oc/utils/json_reader'
 require 'register_ingester_oc/utils/gzip_reader'
 
 require 'active_support/core_ext/hash/indifferent_access'
+require 'active_support/core_ext/object/blank'
 
 module RegisterIngesterOc
   module Services
@@ -26,15 +27,15 @@ module RegisterIngesterOc
           reader.foreach(unzipped) do |row|
             row = row.with_indifferent_access
             yield RegisterSourcesOc::Company.new(
-              company_number: row['company_number'],
-              jurisdiction_code: row['jurisdiction_code'],
-              name: row['name'],
-              company_type: row['company_type'],
-              incorporation_date: row['incorporation_date'],
-              dissolution_date: row['dissolution_date'],
+              company_number: row['company_number'].presence,
+              jurisdiction_code: row['jurisdiction_code'].presence,
+              name: row['name'].presence,
+              company_type: row['company_type'].presence,
+              incorporation_date: row['incorporation_date'].presence,
+              dissolution_date: row['dissolution_date'].presence,
               restricted_for_marketing: row['restricted_for_marketing'],
-              registered_address_in_full: row['registered_address.in_full'],
-              registered_address_country: row['registered_address.country']
+              registered_address_in_full: row['registered_address.in_full'].presence,
+              registered_address_country: row['registered_address.country'].presence
             )
           end
         end

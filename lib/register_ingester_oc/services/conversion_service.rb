@@ -67,8 +67,10 @@ module RegisterIngesterOc
             incorporation_date,
             dissolution_date,
             CASE lower(restricted_for_marketing)
-              WHEN 'true', 't' THEN TRUE
-              WHEN 'false', 'f' THEN FALSE  
+              WHEN 'true' THEN TRUE
+              WHEN 't' THEN TRUE
+              WHEN 'false' THEN FALSE
+              WHEN 'f' THEN FALSE
               ELSE NULL
             END AS restricted_for_marketing,
             "registered_address.country",

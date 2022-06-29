@@ -93,27 +93,21 @@ module RegisterIngesterOc
         results = company_service.get_company(jurisdiction_code, company_number)
         if !results.empty?
           results.each do |result|
-            unless (result[:response1].keys.map(&:to_sym) == [:registered_address_in_full]) && (result[:response2].keys.map(&:to_sym) == [:registered_address_in_full])
-              print "get_company jurisdiction_code:#{jurisdiction_code} company_number:#{company_number} result:#{JSON.pretty_generate(result)}\n"
-            end
+            print "get_company jurisdiction_code:#{jurisdiction_code} company_number:#{company_number} result:#{JSON.pretty_generate(result)}\n"
           end
         end
 
         results = company_service.search_companies(jurisdiction_code, company_number)
         if !results.empty?
           results.each do |result|
-            unless (result[:response1].keys.map(&:to_sym) == [:registered_address_in_full]) && (result[:response2].keys.map(&:to_sym) == [:registered_address_in_full])
-              print "search_companies jurisdiction_code:#{jurisdiction_code} company_number:#{company_number} result:#{JSON.pretty_generate(result)}\n"
-            end
+            print "search_companies jurisdiction_code:#{jurisdiction_code} company_number:#{company_number} result:#{JSON.pretty_generate(result)}\n"
           end
         end
 
         results = company_service.search_companies_by_name(name)
         if !results.empty?
           results.each do |result|
-            unless (result[:response1].keys.map(&:to_sym) == [:registered_address_in_full]) && (result[:response2].keys.map(&:to_sym) == [:registered_address_in_full])
-              print "search_companies_by_name name:#{name} result:#{JSON.pretty_generate(result)}\n"
-            end
+            print "search_companies_by_name name:#{name} result:#{JSON.pretty_generate(result)}\n"
           end
         end
       end

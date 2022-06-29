@@ -1,6 +1,6 @@
 GIT
   remote: git@github.com:openownership/register-sources-oc.git
-  revision: 95839ed2e4a67e6ab17aea0413f4dd9496dd3872
+  revision: aa8454bb758ee935ba94b5ec496430fd6b2623cf
   branch: restrict_field_responses
   specs:
     register_sources_oc (0.1.0)

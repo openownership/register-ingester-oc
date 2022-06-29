@@ -1,5 +1,6 @@
 #!/usr/bin/env ruby
 
+require 'register_ingester_oc/config/settings'
 require 'register_sources_oc/repositories/company_repository'
 
 require 'register_ingester_oc/config/adapters'
@@ -21,12 +22,12 @@ module RegisterIngesterOc
         month = args[0]
         import_type = args[1]
 
-        EsIngester.new.call(month: month, import_type: import_type)
+        new().call(month: month, import_type: import_type)
       end
 
       def initialize(
         file_reader: Services::CompanyFileReader.new,
-        company_repository: Repositories::CompanyRepository.new(client: Config::ELASTICSEARCH_CLIENT),
+        company_repository: RegisterSourcesOc::Repositories::CompanyRepository.new(client: Config::ELASTICSEARCH_CLIENT),
         s3_adapter: Config::Adapters::S3_ADAPTER,
         s3_bucket: ENV.fetch('ATHENA_S3_BUCKET'),
         diffs_s3_prefix: ENV.fetch('EXPORT_JSON_DIFFS_S3_PREFIX'),
