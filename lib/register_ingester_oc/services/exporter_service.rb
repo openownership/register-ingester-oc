@@ -105,7 +105,8 @@ module RegisterIngesterOc
             (prev.incorporation_date <> current.incorporation_date) OR
             (prev.dissolution_date <> current.dissolution_date) OR
             (prev.restricted_for_marketing <> current.restricted_for_marketing) OR
-            (prev."registered_address.in_full" <> current."registered_address.in_full")
+            (prev."registered_address.in_full" <> current."registered_address.in_full") OR
+            (prev."registered_address.country" <> current."registered_address.country")
           );
         SQL
         execute_sql query

@@ -33,7 +33,8 @@ module RegisterIngesterOc
               incorporation_date: row['incorporation_date'],
               dissolution_date: row['dissolution_date'],
               restricted_for_marketing: row['restricted_for_marketing'],
-              registered_address_in_full: row['registered_address.in_full']
+              registered_address_in_full: row['registered_address.in_full'],
+              registered_address_country: row['registered_address.country']
             )
           end
         end

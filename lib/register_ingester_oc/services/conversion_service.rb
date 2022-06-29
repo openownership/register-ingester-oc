@@ -66,7 +66,12 @@ module RegisterIngesterOc
             company_type,
             incorporation_date,
             dissolution_date,
-            restricted_for_marketing,
+            CASE lower(restricted_for_marketing)
+              WHEN 'true', 't' THEN TRUE
+              WHEN 'false', 'f' THEN FALSE  
+              ELSE NULL
+            END AS restricted_for_marketing,
+            "registered_address.country",
             "registered_address.in_full",
             mth,
             jurisdiction_code

@@ -80,7 +80,8 @@ module RegisterIngesterOc
             company_type STRING,
             incorporation_date STRING,
             dissolution_date STRING,
-            restricted_for_marketing STRING,
+            restricted_for_marketing BOOLEAN,
+            `registered_address.country` STRING,
             `registered_address.in_full` STRING
           )
           PARTITIONED BY (`mth` STRING, `jurisdiction_code` STRING)
