@@ -34,7 +34,7 @@ module RegisterIngesterOc
               incorporation_date: row['incorporation_date'].presence,
               dissolution_date: row['dissolution_date'].presence,
               restricted_for_marketing: row['restricted_for_marketing'],
-              registered_address_in_full: row['registered_address.in_full'].presence,
+              registered_address_in_full: row['registered_address.in_full'].presence && row['registered_address.in_full'].presence.gsub("\\n", "\n"),
               registered_address_country: row['registered_address.country'].presence
             )
           end
