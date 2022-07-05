@@ -1,7 +1,5 @@
-GIT
-  remote: git@github.com:openownership/register-sources-oc.git
-  revision: aa8454bb758ee935ba94b5ec496430fd6b2623cf
-  branch: restrict_field_responses
+PATH
+  remote: ../register-sources-oc
   specs:
     register_sources_oc (0.1.0)
       activesupport (~> 6.1.4.1)
@@ -130,7 +128,7 @@ GEM
     ice_nine (0.11.2)
     iso8601 (0.13.0)
     jmespath (1.6.1)
-    minitest (5.16.1)
+    minitest (5.16.2)
     multi_json (1.15.0)
     multipart-post (2.2.3)
     net-http-persistent (4.0.1)

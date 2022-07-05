@@ -90,6 +90,7 @@ module RegisterIngesterOc
         company_number = record.company_number
         name = record.name
 
+        #print "CHECK GET COMPANY\n"
         results = company_service.get_company(jurisdiction_code, company_number)
         if !results.empty?
           results.each do |result|
@@ -97,6 +98,7 @@ module RegisterIngesterOc
           end
         end
 
+        #print "CHECK SEARCH COMPANY\n"
         results = company_service.search_companies(jurisdiction_code, company_number)
         if !results.empty?
           results.each do |result|
@@ -104,12 +106,12 @@ module RegisterIngesterOc
           end
         end
 
-        results = company_service.search_companies_by_name(name)
-        if !results.empty?
-          results.each do |result|
-            print "search_companies_by_name name:#{name} result:#{JSON.pretty_generate(result)}\n"
-          end
-        end
+        #results = company_service.search_companies_by_name(name)
+        #if !results.empty?
+        #  results.each do |result|
+        #    print "search_companies_by_name name:#{name} result:#{JSON.pretty_generate(result)}\n"
+        #  end
+        #end
       end
     end
   end
