@@ -1,5 +1,6 @@
-PATH
-  remote: ../register-sources-oc
+GIT
+  remote: git@github.com:openownership/register-sources-oc.git
+  revision: 4e0a2524723b140c1add73c595a68aa5874e0198
   specs:
     register_sources_oc (0.1.0)
       activesupport (~> 6.1.4.1)
