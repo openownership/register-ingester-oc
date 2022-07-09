@@ -124,17 +124,17 @@ module RegisterIngesterOc
 
       def calc_prev_month(month)
         month_split = month.split('_', 2).map(&:to_i)
-        if month_split.length > 1
+        if month_split.length != 1
           raise 'wrong month format'
         end
         
-        year_i = month[0...4].to_i
-        month_i = month[5..6].to_i
+        year_i = month_split[0].to_i
+        month_i = month_split[1].to_i
 
         prev_year_i = (month_i == 1) ? (year_i-1) : year_i
         prev_month_i = (month_i == 1) ? 12 : (month_i-1)
 
-        "%d%02d" % [prev_year_i, prev_month_i]
+        "%d_%02d" % [prev_year_i, prev_month_i]
       end
     end
   end
