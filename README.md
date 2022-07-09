@@ -21,13 +21,15 @@ bundle install
 You will be prompted for your SFTP password for the OpenCorporates download.
 
 ```shell
-bundle exec bin/download_from_oc {LOCAL_PATH}
+bundle exec bin/download_from_oc {REM_FOLDER_NAME} {LOCAL_PATH}
+bundle exec bin/download_from_oc /oc-sftp-prod/open_ownership/2022-07-04 /tmp/oc_file
 ```
 
 ### 4. Split and upload file in Gzipped parts to S3
 
 ```shell
-bundle exec bin/upload_split_bulk_data {LOCAL_PATH}
+bundle exec bin/upload_split_bulk_data {LOCAL_PATH} {MONTH}
+bundle exec bin/upload_split_bulk_data /tmp/oc_file 2022_07
 ```
 
 WIP:
