@@ -124,7 +124,7 @@ module RegisterIngesterOc
 
       def calc_prev_month(month)
         month_split = month.split('_', 2).map(&:to_i)
-        if month_split.length != 1
+        if month_split.length != 2
           raise 'wrong month format'
         end
         
