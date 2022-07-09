@@ -4,8 +4,8 @@ require 'register_ingester_oc/services/oc_splitter_service'
 module RegisterIngesterOc
   module Apps
     class BulkDataSplitter
-      DEFAULT_SPLIT_SIZE = 10_000
-      DEFAULT_MAX_LINES = 500_000
+      DEFAULT_SPLIT_SIZE = 2_000_000
+      DEFAULT_MAX_LINES = nil
 
       def self.bash_call(args)
         month = args[0]
