@@ -1,12 +1,8 @@
-require 'elasticsearch'
 require_relative 'settings'
+require 'register_sources_oc/config/elasticsearch'
 
 module RegisterIngesterOc
   module Config
-    ELASTICSEARCH_CLIENT = Elasticsearch::Client.new(
-      host: "http://elastic:#{ENV['ELASTICSEARCH_PASSWORD']}@#{ENV['ELASTICSEARCH_HOST']}:#{ENV['ELASTICSEARCH_PORT']}",
-      transport_options: { ssl: { verify: false } },
-      log: false
-    )
+    ELASTICSEARCH_CLIENT = RegisterSourcesOc::Config::ELASTICSEARCH_CLIENT
   end
 end

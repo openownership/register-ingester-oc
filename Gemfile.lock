@@ -1,6 +1,6 @@
 GIT
   remote: git@github.com:openownership/register-sources-oc.git
-  revision: 4e0a2524723b140c1add73c595a68aa5874e0198
+  revision: 9d185d0f0f466a7de66f19d4eb9295842ad6aaed
   specs:
     register_sources_oc (0.1.0)
       activesupport (~> 6.1.4.1)
@@ -38,8 +38,8 @@ GEM
     addressable (2.8.0)
       public_suffix (>= 2.0.2, < 5.0)
     aws-eventstream (1.2.0)
-    aws-partitions (1.601.0)
-    aws-sdk-athena (1.53.0)
+    aws-partitions (1.603.0)
+    aws-sdk-athena (1.54.0)
       aws-sdk-core (~> 3, >= 3.127.0)
       aws-sigv4 (~> 1.1)
     aws-sdk-core (3.131.2)
