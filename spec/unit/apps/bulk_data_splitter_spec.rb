@@ -30,7 +30,7 @@ RSpec.describe RegisterIngesterOc::Apps::BulkDataSplitter do
     expect(splitter_service).to have_received(:split_file).with(
       stream,
       s3_bucket: s3_bucket,
-      s3_prefix: 'example/prefix/mth2=202205',
+      s3_prefix: 'example/prefix/mth=202205',
       split_size: split_size,
       max_lines: max_lines
     )

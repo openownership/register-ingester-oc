@@ -29,7 +29,7 @@ module RegisterIngesterOc
       end
 
       def call(month:, local_path:)
-        dst_prefix = File.join(s3_prefix, "mth2=#{month}")
+        dst_prefix = File.join(s3_prefix, "mth=#{month}")
 
         File.open(local_path, 'rb') do |stream|
           splitter_service.split_file(
