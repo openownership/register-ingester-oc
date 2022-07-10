@@ -22,8 +22,9 @@ RSpec.describe RegisterIngesterOc::Services::CompanyReader do
         company_type: 'company_type',
         incorporation_date: '2020-09-01',
         dissolution_date: '2022-04-01',
-        restricted_for_marketing: '',
-        :"registered_address.in_full" => 'registered address'
+        restricted_for_marketing: nil,
+        :"registered_address.in_full" => 'registered address',
+        :"registered_address.country" => 'country',
       }
     ]
   end
@@ -37,6 +38,7 @@ RSpec.describe RegisterIngesterOc::Services::CompanyReader do
       rows.map do |row|
         row = row.dup
         row[:registered_address_in_full] = row[:'registered_address.in_full']
+        row[:registered_address_country] = row[:'registered_address.country']
         RegisterSourcesOc::Company.new(**row)
       end
     end

@@ -46,7 +46,6 @@ current_alternative_legal_name_language STRING,
 home_jurisdiction_text STRING,
 native_company_number STRING,
 previous_names STRING,
-alternative_names STRING,
 retrieved_at STRING,
 registry_url STRING,
 restricted_for_marketing STRING,
@@ -59,6 +58,7 @@ annual_return_last_made_up_date STRING,
 has_been_liquidated STRING,
 has_insolvency_history STRING,
 has_charges STRING,
+number_of_employees STRING,
 `registered_address.street_address` STRING,
 `registered_address.locality` STRING,
 `registered_address.region` STRING,
@@ -76,6 +76,7 @@ latest_accounts_liabilities STRING
 )
   PARTITIONED BY (`mth` STRING, `part` STRING)
   ROW FORMAT SERDE 'org.apache.hadoop.hive.serde2.OpenCSVSerde'
+  WITH SERDEPROPERTIES ("escapeChar"= "¬")
   LOCATION 's3://s3_bucket//bulk';
 SQL
       create_raw_execution_id = double 'create_raw_execution_id'
@@ -105,7 +106,6 @@ current_alternative_legal_name_language STRING,
 home_jurisdiction_text STRING,
 native_company_number STRING,
 previous_names STRING,
-alternative_names STRING,
 retrieved_at STRING,
 registry_url STRING,
 restricted_for_marketing STRING,
@@ -118,6 +118,7 @@ annual_return_last_made_up_date STRING,
 has_been_liquidated STRING,
 has_insolvency_history STRING,
 has_charges STRING,
+number_of_employees STRING,
 `registered_address.street_address` STRING,
 `registered_address.locality` STRING,
 `registered_address.region` STRING,
@@ -161,7 +162,8 @@ CREATE EXTERNAL TABLE IF NOT EXISTS `filtered_table_name` (
   company_type STRING,
   incorporation_date STRING,
   dissolution_date STRING,
-  restricted_for_marketing STRING,
+  restricted_for_marketing BOOLEAN,
+  `registered_address.country` STRING,
   `registered_address.in_full` STRING
 )
 PARTITIONED BY (`mth` STRING, `jurisdiction_code` STRING)
