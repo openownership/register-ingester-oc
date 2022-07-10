@@ -8,12 +8,12 @@ module RegisterIngesterOc
         athena_adapter: Config::Adapters::ATHENA_ADAPTER,
         athena_database: ENV.fetch('ATHENA_DATABASE'),
         s3_bucket: ENV.fetch('ATHENA_S3_BUCKET'),
-        raw_table_name: ENV.fetch('ATHENA_RAW_TABLE_NAME'),
-        processed_table_name: ENV.fetch('ATHENA_PROCESSED_TABLE_NAME'),
-        filtered_table_name: ENV.fetch('ATHENA_FILTERED_TABLE_NAME'),
-        bulk_data_s3_prefix: ENV.fetch('BULK_DATA_S3_PREFIX'),
-        processed_s3_location: ENV.fetch('PROCESSED_S3_LOCATION'),
-        filtered_s3_location: ENV.fetch('FILTERED_S3_LOCATION')
+        raw_table_name: ENV.fetch('COMPANIES_ATHENA_RAW_TABLE_NAME'),
+        processed_table_name: ENV.fetch('COMPANIES_ATHENA_PROCESSED_TABLE_NAME'),
+        filtered_table_name: ENV.fetch('COMPANIES_ATHENA_FILTERED_TABLE_NAME'),
+        bulk_data_s3_prefix: ENV.fetch('COMPANIES_BULK_DATA_S3_PREFIX'),
+        processed_s3_location: ENV.fetch('COMPANIES_PROCESSED_S3_LOCATION'),
+        filtered_s3_location: ENV.fetch('COMPANIES_FILTERED_S3_LOCATION')
       )
         @athena_adapter = athena_adapter
         @athena_database = athena_database

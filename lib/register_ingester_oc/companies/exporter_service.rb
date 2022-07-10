@@ -8,9 +8,9 @@ module RegisterIngesterOc
         athena_adapter: Config::Adapters::ATHENA_ADAPTER,
         athena_database: ENV.fetch('ATHENA_DATABASE'),
         s3_bucket: ENV.fetch('ATHENA_S3_BUCKET'),
-        filtered_table_name: ENV.fetch('ATHENA_FILTERED_TABLE_NAME'),
-        full_s3_prefix: ENV.fetch('EXPORT_JSON_FULL_S3_PREFIX'),
-        diffs_s3_prefix: ENV.fetch('EXPORT_JSON_DIFFS_S3_PREFIX')
+        filtered_table_name: ENV.fetch('COMPANIES_ATHENA_FILTERED_TABLE_NAME'),
+        full_s3_prefix: ENV.fetch('COMPANIES_EXPORT_JSON_FULL_S3_PREFIX'),
+        diffs_s3_prefix: ENV.fetch('COMPANIES_EXPORT_JSON_DIFFS_S3_PREFIX')
       )
         @athena_adapter = athena_adapter
         @athena_database = athena_database

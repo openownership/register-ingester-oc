@@ -33,8 +33,8 @@ module RegisterIngesterOc
         company_repository: RegisterSourcesOc::Repositories::CompanyRepository.new(client: Config::ELASTICSEARCH_CLIENT),
         s3_adapter: Config::Adapters::S3_ADAPTER,
         s3_bucket: ENV.fetch('ATHENA_S3_BUCKET'),
-        diffs_s3_prefix: ENV.fetch('EXPORT_JSON_DIFFS_S3_PREFIX'),
-        full_s3_prefix: ENV.fetch('EXPORT_JSON_FULL_S3_PREFIX')
+        diffs_s3_prefix: ENV.fetch('COMPANIES_EXPORT_JSON_DIFFS_S3_PREFIX'),
+        full_s3_prefix: ENV.fetch('COMPANIES_EXPORT_JSON_FULL_S3_PREFIX')
       )
         @file_reader = file_reader
         @company_repository = company_repository

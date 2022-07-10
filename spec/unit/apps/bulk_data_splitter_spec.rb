@@ -4,7 +4,6 @@ RSpec.describe RegisterIngesterOc::Apps::BulkDataSplitter do
   subject do
     described_class.new(
       s3_bucket: s3_bucket,
-      s3_prefix: s3_prefix,
       splitter_service: splitter_service,
       split_size: split_size,
       max_lines: max_lines

@@ -10,9 +10,9 @@ module RegisterIngesterOc
         athena_adapter: Config::Adapters::ATHENA_ADAPTER,
         athena_database: ENV.fetch('ATHENA_DATABASE'),
         s3_bucket: ENV.fetch('ATHENA_S3_BUCKET'),
-        raw_table_name: ENV.fetch('ATHENA_RAW_TABLE_NAME'),
-        processed_table_name: ENV.fetch('ATHENA_PROCESSED_TABLE_NAME'),
-        filtered_table_name: ENV.fetch('ATHENA_FILTERED_TABLE_NAME')
+        raw_table_name: ENV.fetch('COMPANIES_ATHENA_RAW_TABLE_NAME'),
+        processed_table_name: ENV.fetch('COMPANIES_ATHENA_PROCESSED_TABLE_NAME'),
+        filtered_table_name: ENV.fetch('COMPANIES_ATHENA_FILTERED_TABLE_NAME')
       )
         @athena_adapter = athena_adapter
         @athena_database = athena_database

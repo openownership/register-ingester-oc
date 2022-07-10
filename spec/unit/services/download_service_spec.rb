@@ -1,7 +1,7 @@
 require 'register_ingester_oc/services/download_service'
 
 RSpec.describe RegisterIngesterOc::Services::DownloadService do
-  subject { described_class.new(sftp_adapter: sftp_adapter, filename: filename, settings: settings) }
+  subject { described_class.new(sftp_adapter: sftp_adapter, settings: settings) }
 
   let(:sftp_adapter) { double 'sftp_adapter'}
   let(:filename) { 'md5sum.txt' }
@@ -14,7 +14,7 @@ RSpec.describe RegisterIngesterOc::Services::DownloadService do
       month = '2022_05'
       dst_path = '/tmp/something'
 
-      subject.download(month, dst_path)
+      subject.download(month, dst_path, filename: filename)
 
       expect(sftp_adapter).to have_received(:download_file).with(
         host: settings.OC_HOST,
