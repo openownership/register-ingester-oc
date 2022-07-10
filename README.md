@@ -47,25 +47,25 @@ bundle exec bin/create_tables
 ### 6. Convert OC bulk data using Athena
 
 ```shell
-bundle exec bin/convert_oc_data 202205
+bundle exec bin/convert_oc_data 2022_07
 ```
 
 ### 7. Export OC bulk data for ingest into Elasticsearch
 
 ```shell
-bundle exec bin/export_oc_data 202205
+bundle exec bin/export_oc_data 2022_07
 ```
 
 ### 8. Ingest S3 exported files into Elasticsearch
 
 To import the full data for a month:
 ```shell
-bundle exec bin/ingest_into_es 202205 full
+bundle exec bin/ingest_into_es 2022_07 full
 ```
 
 Otherwise, to import the diffs for a month:
 ```shell
-bundle exec bin/ingest_into_es 202205 diff
+bundle exec bin/ingest_into_es 2022_07 diff
 ```
 
 Note:

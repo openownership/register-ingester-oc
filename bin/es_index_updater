@@ -1,5 +1,0 @@
-#!/usr/bin/env ruby
-
-require 'register_ingester_oc/services/es_index_updater'
-
-RegisterIngesterOc::Services::EsIndexUpdater.new.create_index
