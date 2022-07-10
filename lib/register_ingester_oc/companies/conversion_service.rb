@@ -2,7 +2,7 @@ require 'register_ingester_oc/config/adapters'
 require 'register_ingester_oc/config/settings'
 
 module RegisterIngesterOc
-  module Services
+  module Companies
     class ConversionService
       DEFAULT_JURISDICTION_CODES = ['gb', 'dk', 'sk']
 

@@ -1,5 +1,5 @@
 require 'register_ingester_oc/config/settings'
-require 'register_ingester_oc/services/create_tables_service'
+require 'register_ingester_oc/companies/create_tables_service'
 
 module RegisterIngesterOc
   module Apps
@@ -9,7 +9,7 @@ module RegisterIngesterOc
       end
 
       def initialize(
-        create_tables_service: Services::CreateTablesService.new
+        create_tables_service: Companies::CreateTablesService.new
       )
         @create_tables_service = create_tables_service
       end

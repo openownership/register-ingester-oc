@@ -2,7 +2,7 @@ require 'register_ingester_oc/config/adapters'
 require 'register_ingester_oc/config/settings'
 
 module RegisterIngesterOc
-  module Services
+  module AddIdentifiers
     class ExporterService
       def initialize(
         athena_adapter: Config::Adapters::ATHENA_ADAPTER,

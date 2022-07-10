@@ -70,3 +70,8 @@ bundle exec bin/ingest_into_es 2022_07 diff
 
 Note:
 Importing into ES takes roughly 4 minutes per 22Mb compressed JSON file locally, so under this for diffs each month, but 30 files this size for initial full import, so about 2 hours.
+
+# Alternate Names
+
+# Additional Identifiers
+

@@ -1,6 +1,6 @@
-require 'register_ingester_oc/services/company_file_reader'
+require 'register_ingester_oc/companies/file_reader'
 
-RSpec.describe RegisterIngesterOc::Services::CompanyFileReader do
+RSpec.describe RegisterIngesterOc::Companies::FileReader do
   subject { described_class.new(reader: reader, s3_adapter: s3_adapter, batch_size: batch_size) }
 
   let(:reader) { double 'reader' }

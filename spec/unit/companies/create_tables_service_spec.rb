@@ -1,6 +1,6 @@
-require 'register_ingester_oc/services/create_tables_service'
+require 'register_ingester_oc/companies/create_tables_service'
 
-RSpec.describe RegisterIngesterOc::Services::CreateTablesService do
+RSpec.describe RegisterIngesterOc::Companies::CreateTablesService do
   subject do
     described_class.new(
       athena_adapter: athena_adapter,

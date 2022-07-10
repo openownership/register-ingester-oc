@@ -1,14 +1,13 @@
 require 'tmpdir'
 require 'register_ingester_oc/config/adapters'
-require 'register_ingester_oc/services/company_reader'
 
 module RegisterIngesterOc
   module Services
-    class CompanyFileReader
+    class FileReader
       BATCH_SIZE = 100
 
       def initialize(
-        reader: CompanyReader.new,
+        reader:,
         s3_adapter: Config::Adapters::S3_ADAPTER,
         batch_size: BATCH_SIZE
       )

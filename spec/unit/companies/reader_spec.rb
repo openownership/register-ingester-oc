@@ -1,6 +1,6 @@
-require 'register_ingester_oc/services/company_reader'
+require 'register_ingester_oc/companies/reader'
 
-RSpec.describe RegisterIngesterOc::Services::CompanyReader do
+RSpec.describe RegisterIngesterOc::Companies::Reader do
   subject do
     described_class.new(
       csv_reader: csv_reader,

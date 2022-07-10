@@ -8,7 +8,7 @@ require 'register_sources_oc/services/company_service'
 
 require 'register_ingester_oc/config/adapters'
 require 'register_ingester_oc/config/elasticsearch'
-require 'register_ingester_oc/services/company_file_reader'
+require 'register_ingester_oc/companies/file_reader'
 
 module RegisterIngesterOc
   module Apps
@@ -29,7 +29,7 @@ module RegisterIngesterOc
 
       def initialize(
         company_service: RegisterSourcesOc::Services::CompanyService.new(comparison_mode: true),
-        file_reader: Services::CompanyFileReader.new,
+        file_reader: Companies::FileReader.new,
         company_repository: RegisterSourcesOc::Repositories::CompanyRepository.new(client: Config::ELASTICSEARCH_CLIENT),
         s3_adapter: Config::Adapters::S3_ADAPTER,
         s3_bucket: ENV.fetch('ATHENA_S3_BUCKET'),
@@ -64,11 +64,6 @@ module RegisterIngesterOc
 
         # Ingest S3 files
         s3_paths.each do |s3_path|
-          #print "\nIMPORTING #{s3_path}\n"
-          #file_reader.import_from_s3(s3_bucket: s3_bucket, s3_path: s3_path, file_format: 'json') do |records|
-          #  company_repository.store records
-          #end
-
           print "\nCHECKING #{s3_path}\n"
           file_reader.import_from_s3(s3_bucket: s3_bucket, s3_path: s3_path, file_format: 'json') do |records|
             records.each do |record|

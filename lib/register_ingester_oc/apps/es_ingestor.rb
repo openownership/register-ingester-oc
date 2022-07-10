@@ -6,7 +6,7 @@ require 'register_sources_oc/repositories/company_repository'
 require 'register_ingester_oc/config/adapters'
 require 'register_ingester_oc/config/elasticsearch'
 require 'register_ingester_oc/config/settings'
-require 'register_ingester_oc/services/company_file_reader'
+require 'register_ingester_oc/services/file_reader'
 
 module RegisterIngesterOc
   module Apps
@@ -26,7 +26,7 @@ module RegisterIngesterOc
       end
 
       def initialize(
-        file_reader: Services::CompanyFileReader.new,
+        file_reader: Companies::FileReader.new,
         company_repository: RegisterSourcesOc::Repositories::CompanyRepository.new(client: Config::ELASTICSEARCH_CLIENT),
         s3_adapter: Config::Adapters::S3_ADAPTER,
         s3_bucket: ENV.fetch('ATHENA_S3_BUCKET'),

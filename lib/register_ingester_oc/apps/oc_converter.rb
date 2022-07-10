@@ -1,5 +1,5 @@
 require 'register_ingester_oc/config/settings'
-require 'register_ingester_oc/services/conversion_service'
+require 'register_ingester_oc/companies/conversion_service'
 
 module RegisterIngesterOc
   module Apps
@@ -11,7 +11,7 @@ module RegisterIngesterOc
       end
 
       def initialize(
-        conversion_service: Services::ConversionService.new
+        conversion_service: Companies::ConversionService.new
       )
         @conversion_service = conversion_service
       end

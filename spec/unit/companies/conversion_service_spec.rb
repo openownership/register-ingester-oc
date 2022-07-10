@@ -1,6 +1,6 @@
-require 'register_ingester_oc/services/conversion_service'
+require 'register_ingester_oc/companies/conversion_service'
 
-RSpec.describe RegisterIngesterOc::Services::ConversionService do
+RSpec.describe RegisterIngesterOc::Companies::ConversionService do
   subject do
     described_class.new(
       athena_adapter: athena_adapter,
