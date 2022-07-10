@@ -100,6 +100,7 @@ module RegisterIngesterOc
             prev.mth = '#{prev_month}'
           AND
           (
+            (prev.name IS NULL) OR
             (prev.name <> current.name) OR
             (prev.company_type <> current.company_type) OR
             (prev.incorporation_date <> current.incorporation_date) OR

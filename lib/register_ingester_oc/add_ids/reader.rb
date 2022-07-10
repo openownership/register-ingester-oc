@@ -1,8 +1,7 @@
 require 'register_ingester_oc/utils/generic_reader'
-require 'register_sources_oc/structs/company'
 
 module RegisterIngesterOc
-  module AddIdentifiers
+  module AddIds
     class Reader < Utils::GenericReader
       private
 

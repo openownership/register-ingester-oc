@@ -1,4 +1,6 @@
 require 'register_ingester_oc/config/settings'
+require 'register_ingester_oc/add_ids/conversion_service'
+require 'register_ingester_oc/alt_names/conversion_service'
 require 'register_ingester_oc/companies/conversion_service'
 
 module RegisterIngesterOc
@@ -6,23 +8,30 @@ module RegisterIngesterOc
     class OcConverter
       def self.bash_call(args)
         month = args[0]
+        oc_source = args[1]
 
-        OcConverter.new.call month
+        OcConverter.new.call month, oc_source
       end
 
-      def initialize(
-        conversion_service: Companies::ConversionService.new
-      )
-        @conversion_service = conversion_service
-      end
-
-      def call(month)
+      def call(month, oc_source)
+        conversion_service = select_conversion_service(oc_source)
         conversion_service.call month
       end
 
       private
 
-      attr_reader :conversion_service
+      def select_conversion_service(oc_source)
+        case oc_source
+        when 'companies'
+          Companies::ConversionService.new
+        when 'alt_names'
+          AltNames::ConversionService.new
+        when 'add_ids'
+          AddIds::ConversionService.new
+        else
+          raise 'unknown oc_source'
+        end
+      end
     end
   end
 end

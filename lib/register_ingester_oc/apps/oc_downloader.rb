@@ -38,7 +38,7 @@ module RegisterIngesterOc
           'companies.csv.gz'
         when 'alt_names'
           'alternative_names.csv.gz'
-        when 'add_identifiers'
+        when 'add_ids'
           'additional_identifiers.csv.gz'
         else
           raise 'unknown oc_source'

@@ -2,14 +2,14 @@ require 'register_ingester_oc/config/adapters'
 require 'register_ingester_oc/config/settings'
 
 module RegisterIngesterOc
-  module AltNames
+  module AddIds
     class ExporterService
       def initialize(
         athena_adapter: Config::Adapters::ATHENA_ADAPTER,
         athena_database: ENV.fetch('ATHENA_DATABASE'),
         s3_bucket: ENV.fetch('ATHENA_S3_BUCKET'),
-        filtered_table_name: ENV.fetch('ALT_NAMES_ATHENA_FILTERED_TABLE_NAME'),
-        full_s3_prefix: ENV.fetch('ALT_NAMES_EXPORT_JSON_FULL_S3_PREFIX')
+        filtered_table_name: ENV.fetch('ADD_IDS_ATHENA_FILTERED_TABLE_NAME'),
+        full_s3_prefix: ENV.fetch('ADD_IDS_EXPORT_JSON_FULL_S3_PREFIX')
       )
         @athena_adapter = athena_adapter
         @athena_database = athena_database

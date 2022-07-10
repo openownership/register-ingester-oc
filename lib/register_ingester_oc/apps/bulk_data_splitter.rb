@@ -52,8 +52,8 @@ module RegisterIngesterOc
           ENV.fetch('COMPANIES_BULK_DATA_S3_PREFIX')
         when 'alt_names'
           ENV.fetch('ALT_NAMES_BULK_DATA_S3_PREFIX')
-        when 'add_identifiers'
-          ENV.fetch('ADD_IDENTIFIERS_BULK_DATA_S3_PREFIX')
+        when 'add_ids'
+          ENV.fetch('ADD_IDS_BULK_DATA_S3_PREFIX')
         else
           raise 'unknown oc_source'
         end

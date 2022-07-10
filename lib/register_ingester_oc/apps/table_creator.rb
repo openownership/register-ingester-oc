@@ -1,26 +1,36 @@
 require 'register_ingester_oc/config/settings'
+require 'register_ingester_oc/add_ids/create_tables_service'
+require 'register_ingester_oc/alt_names/create_tables_service'
 require 'register_ingester_oc/companies/create_tables_service'
 
 module RegisterIngesterOc
   module Apps
     class TableCreator
-      def self.bash_call
-        TableCreator.new.call
+      def self.bash_call(args)
+        oc_source = args[0]
+
+        TableCreator.new.call(oc_source)
       end
 
-      def initialize(
-        create_tables_service: Companies::CreateTablesService.new
-      )
-        @create_tables_service = create_tables_service
-      end
-
-      def call
+      def call(oc_source)
+        create_tables_service = select_create_tables_service(oc_source)
         create_tables_service.call
       end
 
       private
 
-      attr_reader :create_tables_service
+      def select_create_tables_service(oc_source)
+        case oc_source
+        when 'companies'
+          Companies::CreateTablesService.new
+        when 'alt_names'
+          AltNames::CreateTablesService.new
+        when 'add_ids'
+          AddIds::CreateTablesService.new
+        else
+          raise 'unknown oc_source'
+        end
+      end
     end
   end
 end

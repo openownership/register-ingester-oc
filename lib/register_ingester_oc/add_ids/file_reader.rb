@@ -3,9 +3,9 @@ require 'register_ingester_oc/services/file_reader'
 require 'register_ingester_oc/alt_names/reader'
 
 module RegisterIngesterOc
-  module AddIdentifiers
+  module AddIds
     class FileReader < Services::FileReader
-      def initialize(reader: AddIdentifiers::Reader.new, **kwargs)
+      def initialize(reader: AddIds::Reader.new, **kwargs)
         super(reader: reader, **kwargs)
       end
     end

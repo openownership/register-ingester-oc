@@ -2,4 +2,4 @@
 
 require 'register_ingester_oc/apps/table_creator'
 
-RegisterIngesterOc::Apps::TableCreator.bash_call
+RegisterIngesterOc::Apps::TableCreator.bash_call ARGV

@@ -2,7 +2,7 @@ require 'register_ingester_oc/config/adapters'
 require 'register_ingester_oc/config/settings'
 
 module RegisterIngesterOc
-  module AddIdentifiers
+  module AddIds
     class ConversionService
       DEFAULT_JURISDICTION_CODES = ['gb', 'dk', 'sk']
 
@@ -10,9 +10,9 @@ module RegisterIngesterOc
         athena_adapter: Config::Adapters::ATHENA_ADAPTER,
         athena_database: ENV.fetch('ATHENA_DATABASE'),
         s3_bucket: ENV.fetch('ATHENA_S3_BUCKET'),
-        raw_table_name: ENV.fetch('ATHENA_RAW_TABLE_NAME'),
-        processed_table_name: ENV.fetch('ATHENA_PROCESSED_TABLE_NAME'),
-        filtered_table_name: ENV.fetch('ATHENA_FILTERED_TABLE_NAME')
+        raw_table_name: ENV.fetch('ADD_IDS_ATHENA_RAW_TABLE_NAME'),
+        processed_table_name: ENV.fetch('ADD_IDS_ATHENA_PROCESSED_TABLE_NAME'),
+        filtered_table_name: ENV.fetch('ADD_IDS_ATHENA_FILTERED_TABLE_NAME')
       )
         @athena_adapter = athena_adapter
         @athena_database = athena_database
@@ -62,19 +62,8 @@ module RegisterIngesterOc
           INSERT INTO #{dst_table_name}
           SELECT
             company_number,
-            name,
-            company_type,
-            incorporation_date,
-            dissolution_date,
-            CASE lower(restricted_for_marketing)
-              WHEN 'true' THEN TRUE
-              WHEN 't' THEN TRUE
-              WHEN 'false' THEN FALSE
-              WHEN 'f' THEN FALSE
-              ELSE NULL
-            END AS restricted_for_marketing,
-            "registered_address.country",
-            "registered_address.in_full",
+            uid,
+            identifier_system_code,
             mth,
             jurisdiction_code
           FROM #{src_table_name}
