@@ -1,25 +1,25 @@
 #!/usr/bin/env ruby
 
 require 'register_ingester_oc/config/settings'
-require 'register_sources_oc/repositories/company_repository'
+require 'register_sources_oc/repositories/alt_name_repository'
 
 require 'register_ingester_oc/config/adapters'
 require 'register_ingester_oc/config/elasticsearch'
 require 'register_ingester_oc/config/settings'
-require 'register_ingester_oc/services/file_reader'
+require 'register_ingester_oc/alt_names/file_reader'
 
 module RegisterIngesterOc
   module AltNames
     class EsIngestorService
       def initialize(
-        file_reader: Companies::FileReader.new,
-        company_repository: RegisterSourcesOc::Repositories::CompanyRepository.new(client: Config::ELASTICSEARCH_CLIENT),
+        file_reader: AltNames::FileReader.new,
+        alt_name_repository: RegisterSourcesOc::Repositories::AltNameRepository.new(client: Config::ELASTICSEARCH_CLIENT),
         s3_adapter: Config::Adapters::S3_ADAPTER,
         s3_bucket: ENV.fetch('ATHENA_S3_BUCKET'),
         full_s3_prefix: ENV.fetch('ALT_NAMES_EXPORT_JSON_FULL_S3_PREFIX')
       )
         @file_reader = file_reader
-        @company_repository = company_repository
+        @alt_name_repository = alt_name_repository
         @s3_adapter = s3_adapter
         @s3_bucket = s3_bucket
         @full_s3_prefix = full_s3_prefix
@@ -36,7 +36,7 @@ module RegisterIngesterOc
         s3_paths.each do |s3_path|
           print "STARTED IMPORTING #{s3_path} AT #{Time.now}\n"
           file_reader.import_from_s3(s3_bucket: s3_bucket, s3_path: s3_path, file_format: 'json') do |records|
-            company_repository.store records
+            alt_name_repository.store records
           end
           print "COMPLETED IMPORTING #{s3_path} AT #{Time.now}\n"
         end
@@ -46,7 +46,7 @@ module RegisterIngesterOc
 
       private
 
-      attr_reader :file_reader, :company_repository, :s3_adapter, :s3_bucket, :full_s3_prefix
+      attr_reader :file_reader, :alt_name_repository, :s3_adapter, :s3_bucket, :full_s3_prefix
     end
   end
 end

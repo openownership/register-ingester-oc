@@ -1,4 +1,3 @@
-require_relative 'file_reader'
 require 'register_ingester_oc/services/file_reader'
 require 'register_ingester_oc/companies/reader'
 

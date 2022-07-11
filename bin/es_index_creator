@@ -3,4 +3,8 @@
 require 'register_ingester_oc/config/settings'
 require 'register_sources_oc/services/es_index_creator'
 
-RegisterSourcesOc::Services::EsIndexCreator.new.create_index
+index_creator = RegisterSourcesOc::Services::EsIndexCreator.new
+
+index_creator.create_companies_index
+index_creator.create_add_ids_index
+index_creator.create_alt_names_index

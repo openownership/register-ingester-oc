@@ -5,9 +5,9 @@ module RegisterIngesterOc
   module Apps
     class OcDownloader
       def self.bash_call(args)
-        month = args[0]
-        dst_path = args[1]
-        oc_source = args[2]
+        oc_source = args[0]
+        month = args[1]
+        dst_path = args[2]
 
         OcDownloader.new.call month, dst_path, oc_source
       end

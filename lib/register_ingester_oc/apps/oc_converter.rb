@@ -7,8 +7,8 @@ module RegisterIngesterOc
   module Apps
     class OcConverter
       def self.bash_call(args)
-        month = args[0]
-        oc_source = args[1]
+        oc_source = args[0]
+        month = args[1]
 
         OcConverter.new.call month, oc_source
       end

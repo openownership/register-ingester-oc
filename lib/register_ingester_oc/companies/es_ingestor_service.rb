@@ -5,8 +5,7 @@ require 'register_sources_oc/repositories/company_repository'
 
 require 'register_ingester_oc/config/adapters'
 require 'register_ingester_oc/config/elasticsearch'
-require 'register_ingester_oc/config/settings'
-require 'register_ingester_oc/services/file_reader'
+require 'register_ingester_oc/companies/file_reader'
 
 module RegisterIngesterOc
   module Companies

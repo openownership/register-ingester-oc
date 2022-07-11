@@ -8,9 +8,9 @@ module RegisterIngesterOc
       DEFAULT_MAX_LINES = nil
 
       def self.bash_call(args)
-        month = args[0]
-        local_path = args[1]
-        oc_source = args[2]
+        oc_source = args[0]
+        month = args[1]
+        local_path = args[2]
 
         BulkDataSplitter.new.call(month: month, local_path: local_path, oc_source: oc_source)
       end
