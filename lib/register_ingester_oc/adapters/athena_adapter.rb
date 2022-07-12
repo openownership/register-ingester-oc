@@ -36,6 +36,16 @@ module RegisterIngesterOc
         raise QueryTimeout
       end
 
+      def execute_and_wait(sql_query, output_location)
+        athena_query =start_query_execution({
+          query_string: sql_query,
+          result_configuration: {
+            output_location: output_location
+          }
+        })
+        wait_for_query(athena_query.query_execution_id)
+      end
+
       private
 
       attr_reader :client

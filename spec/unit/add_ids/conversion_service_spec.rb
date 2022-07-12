@@ -25,31 +25,22 @@ RSpec.describe RegisterIngesterOc::AddIds::ConversionService do
 
     it 'calls athena with correct queries' do
       # Repair table query
-      repair_execution_id = double 'repair_execution_id'
-      repair_execution = double 'repair', query_execution_id: repair_execution_id
-      expect(athena_adapter).to receive(:start_query_execution).with(
-        query_string: "MSCK REPAIR TABLE raw_table_name\n",
-        result_configuration: { output_location: "s3://s3_bucket/athena_results" }
-      ).and_return repair_execution
-      expect(athena_adapter).to receive(:wait_for_query).with repair_execution_id
+      expect(athena_adapter).to receive(:execute_and_wait).with(
+        "MSCK REPAIR TABLE raw_table_name\n",
+        "s3://s3_bucket/athena_results"
+      )
 
       # Convert table query
-      convert_execution_id = double 'convert_execution_id'
-      convert_execution = double 'convert', query_execution_id: convert_execution_id
-      expect(athena_adapter).to receive(:start_query_execution).with(
-        query_string: "INSERT INTO processed_table_name\nSELECT * FROM raw_table_name\nWHERE mth = '2022_05';\n",
-        result_configuration: { output_location: "s3://s3_bucket/athena_results" }
-      ).and_return convert_execution
-      expect(athena_adapter).to receive(:wait_for_query).with convert_execution_id
+      expect(athena_adapter).to receive(:execute_and_wait).with(
+        "INSERT INTO processed_table_name\nSELECT * FROM raw_table_name\nWHERE mth = '2022_05';\n",
+        "s3://s3_bucket/athena_results"
+      )
 
       # Inserts into filtered table
-      filter_execution_id = double 'filter_execution_id'
-      filter_execution = double 'filter', query_execution_id: filter_execution_id
-      expect(athena_adapter).to receive(:start_query_execution).with(
-        query_string: "INSERT INTO filtered_table_name\nSELECT\n  company_number,\n  uid,\n  identifier_system_code,\n  mth,\n  jurisdiction_code\nFROM processed_table_name\nWHERE mth = '2022_05' AND jurisdiction_code IN ('gb', 'dk');\n",
-        result_configuration: { output_location: "s3://s3_bucket/athena_results" }
-      ).and_return filter_execution
-      expect(athena_adapter).to receive(:wait_for_query).with filter_execution_id
+      expect(athena_adapter).to receive(:execute_and_wait).with(
+        "INSERT INTO filtered_table_name\nSELECT\n  company_number,\n  uid,\n  identifier_system_code,\n  mth,\n  jurisdiction_code\nFROM processed_table_name\nWHERE mth = '2022_05' AND jurisdiction_code IN ('gb', 'dk');\n",
+        "s3://s3_bucket/athena_results"
+      )
 
       subject.call month, jurisdiction_codes: jurisdiction_codes
     end

@@ -76,13 +76,8 @@ module RegisterIngesterOc
       end
 
       def execute_sql(sql_query)
-        athena_query = athena_adapter.start_query_execution({
-          query_string: sql_query,
-          result_configuration: {
-            output_location: output_location
-          }
-        })
-        athena_adapter.wait_for_query(athena_query.query_execution_id)
+        print("DEBUG: ", sql_query, "\n", output_location, "\n\n")
+        athena_adapter.execute_and_wait(sql_query, output_location)
       end
     end
   end
