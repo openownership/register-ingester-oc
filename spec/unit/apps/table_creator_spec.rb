@@ -2,17 +2,65 @@ require 'register_ingester_oc/apps/table_creator'
 
 RSpec.describe RegisterIngesterOc::Apps::TableCreator do
   subject do
-    described_class.new(create_tables_service: create_tables_service)
+    described_class.new(
+      companies_table_service: companies_table_service,
+      alt_names_table_service: alt_names_table_service,
+      add_ids_table_service: add_ids_table_service
+    )
   end
 
-  let(:create_tables_service) { double 'create_tables_service' }
+  let(:companies_table_service) { double 'companies_table_service' }
+  let(:alt_names_table_service) { double 'alt_names_table_service' }
+  let(:add_ids_table_service) { double 'add_ids_table_service' }
 
-  it 'calls service with correct params' do
-    allow(create_tables_service).to receive(:call)
+  let(:oc_source) { 'companies' }
 
-    subject.call
+  describe '#call' do
+    before do
+      allow(companies_table_service).to receive(:call)
+      allow(alt_names_table_service).to receive(:call)
+      allow(add_ids_table_service).to receive(:call)
+    end
 
-    expect(create_tables_service).to have_received(:call)
+    context 'when oc_source is companies' do
+      let(:oc_source) { 'companies' }
+
+      it 'calls service with correct params' do
+        subject.call(oc_source)
+
+        expect(companies_table_service).to have_received(:call)
+      end
+    end
+
+    context 'when oc_source is add_ids' do
+      let(:oc_source) { 'add_ids' }
+
+      it 'calls service with correct params' do
+        subject.call(oc_source)
+
+        expect(add_ids_table_service).to have_received(:call)
+      end
+    end
+
+    context 'when oc_source is alt_names' do
+      let(:oc_source) { 'alt_names' }
+
+      it 'calls service with correct params' do
+        subject.call(oc_source)
+
+        expect(alt_names_table_service).to have_received(:call)
+      end
+    end
+
+    context 'when oc_source invalid' do
+      let(:oc_source) { 'unknown_source' }
+
+      it 'raises an error' do
+        expect {
+          subject.call(oc_source)
+        }.to raise_error RegisterIngesterOc::UnknownOcSourceError
+      end
+    end    
   end
 
   describe '#bash_call' do
@@ -25,10 +73,12 @@ RSpec.describe RegisterIngesterOc::Apps::TableCreator do
       allow(app).to receive(:call)
     end
 
-    it 'calls app' do
-      subject.bash_call
+    it 'calls app with correct params' do
+      oc_source = 'companies'
 
-      expect(app).to have_received(:call)
+      subject.bash_call [oc_source]
+
+      expect(app).to have_received(:call).with(oc_source)
     end
   end
 end

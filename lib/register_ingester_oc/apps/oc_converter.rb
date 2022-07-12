@@ -1,3 +1,4 @@
+require 'register_ingester_oc/exceptions'
 require 'register_ingester_oc/config/settings'
 require 'register_ingester_oc/add_ids/conversion_service'
 require 'register_ingester_oc/alt_names/conversion_service'
@@ -10,26 +11,38 @@ module RegisterIngesterOc
         oc_source = args[0]
         month = args[1]
 
-        OcConverter.new.call month, oc_source
+        OcConverter.new.call oc_source, month
       end
 
-      def call(month, oc_source)
+      def initialize(
+        companies_conversion_service: Companies::ConversionService.new,
+        alt_names_conversion_service: AltNames::ConversionService.new,
+        add_ids_conversion_service: AddIds::ConversionService.new
+      )
+        @companies_conversion_service = companies_conversion_service
+        @alt_names_conversion_service = alt_names_conversion_service
+        @add_ids_conversion_service = add_ids_conversion_service
+      end
+
+      def call(oc_source, month)
         conversion_service = select_conversion_service(oc_source)
         conversion_service.call month
       end
 
       private
 
+      attr_reader :companies_conversion_service, :alt_names_conversion_service, :add_ids_conversion_service
+
       def select_conversion_service(oc_source)
         case oc_source
         when 'companies'
-          Companies::ConversionService.new
+          companies_conversion_service
         when 'alt_names'
-          AltNames::ConversionService.new
+          alt_names_conversion_service
         when 'add_ids'
-          AddIds::ConversionService.new
+          add_ids_conversion_service
         else
-          raise 'unknown oc_source'
+          raise UnknownOcSourceError
         end
       end
     end

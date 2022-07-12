@@ -7,15 +7,66 @@ RSpec.describe RegisterIngesterOc::Apps::OcDownloader do
 
   let(:download_service) { double 'download_service' }
 
-  it 'calls service with correct params' do
-    allow(download_service).to receive(:download)
+  let(:oc_source) { 'companies' }
+  let(:month) { '2022_05' }
+  let(:dst_path) { 'local_path' }
 
-    month = '202205'
-    local_path = double 'local_path'
+  describe '#call' do
+    before do
+      allow(download_service).to receive(:download)
+    end
 
-    subject.call month, local_path
+    context 'when oc_source is companies' do
+      let(:oc_source) { 'companies' }
 
-    expect(download_service).to have_received(:download).with(month, local_path)
+      it 'calls service with correct params' do
+        subject.call(oc_source, month, dst_path)
+
+        expect(download_service).to have_received(:download).with(
+          month,
+          dst_path,
+          filename: 'companies.csv.gz'
+        )
+      end
+    end
+
+    context 'when oc_source is add_ids' do
+      let(:oc_source) { 'add_ids' }
+
+      it 'calls service with correct params' do
+        subject.call(oc_source, month, dst_path)
+
+        expect(download_service).to have_received(:download).with(
+          month,
+          dst_path,
+          filename: 'additional_identifiers.csv.gz'
+        )
+      end
+    end
+
+    context 'when oc_source is alt_names' do
+      let(:oc_source) { 'alt_names' }
+
+      it 'calls service with correct params' do
+        subject.call(oc_source, month, dst_path)
+
+        expect(download_service).to have_received(:download).with(
+          month,
+          dst_path,
+          filename: 'alternative_names.csv.gz'
+        )
+      end
+    end
+
+    context 'when oc_source invalid' do
+      let(:oc_source) { 'unknown_source' }
+
+      it 'raises an error' do
+        expect {
+          subject.call(oc_source, month, dst_path)
+        }.to raise_error RegisterIngesterOc::UnknownOcSourceError
+      end
+    end    
   end
 
   describe '#bash_call' do
@@ -29,14 +80,13 @@ RSpec.describe RegisterIngesterOc::Apps::OcDownloader do
     end
 
     it 'calls app with correct params' do
+      oc_source = 'companies'
       month = '202205'
-      local_path = double 'local_path'
+      dst_path = double 'dst_path'
 
-      args = [month, local_path]
+      subject.bash_call [oc_source, month, dst_path]
 
-      subject.bash_call args
-
-      expect(app).to have_received(:call).with(month, local_path)
+      expect(app).to have_received(:call).with(oc_source, month, dst_path)
     end
   end
 end

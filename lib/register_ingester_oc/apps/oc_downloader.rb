@@ -1,3 +1,4 @@
+require 'register_ingester_oc/exceptions'
 require 'register_ingester_oc/config/settings'
 require 'register_ingester_oc/services/download_service'
 
@@ -9,16 +10,14 @@ module RegisterIngesterOc
         month = args[1]
         dst_path = args[2]
 
-        OcDownloader.new.call month, dst_path, oc_source
+        OcDownloader.new.call oc_source, month, dst_path 
       end
 
-      def initialize(
-        download_service: Services::DownloadService.new
-      )
+      def initialize(download_service: Services::DownloadService.new)
         @download_service = download_service
       end
 
-      def call(month, dst_path, oc_source)
+      def call(oc_source, month, dst_path)
         filename = select_filename(oc_source)
 
         print "DOWNLOADING #{filename} #{Time.now} to #{dst_path}\n"
@@ -41,7 +40,7 @@ module RegisterIngesterOc
         when 'add_ids'
           'additional_identifiers.csv.gz'
         else
-          raise 'unknown oc_source'
+          raise UnknownOcSourceError
         end
       end
     end
