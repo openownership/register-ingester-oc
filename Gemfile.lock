@@ -1,4 +1,12 @@
 GIT
+  remote: git@github.com:openownership/register-common.git
+  revision: 3ef1d97fe367a31eda0e224cef76ab43bbdee955
+  specs:
+    register_common (0.1.0)
+      aws-sdk-s3 (~> 1.105.1)
+      rubyzip (~> 2.3.2)
+
+GIT
   remote: git@github.com:openownership/register-sources-oc.git
   revision: 15adc19b87ae465c1e7a4f25d98f521c61756261
   specs:
@@ -149,6 +157,7 @@ GEM
       rspec-support (~> 3.11.0)
     rspec-support (3.11.0)
     ruby2_keywords (0.0.5)
+    rubyzip (2.3.2)
     sixarm_ruby_unaccent (1.2.0)
     tzinfo (2.0.4)
       concurrent-ruby (~> 1.0)
@@ -163,6 +172,7 @@ PLATFORMS
   x86_64-linux
 
 DEPENDENCIES
+  register_common!
   register_ingester_oc!
   register_sources_oc!
   rspec (~> 3.0)
