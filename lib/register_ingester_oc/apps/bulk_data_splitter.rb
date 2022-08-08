@@ -1,6 +1,6 @@
+require 'register_common/services/stream_uploader_service'
 require 'register_ingester_oc/exceptions'
-require 'register_ingester_oc/config/settings'
-require 'register_ingester_oc/services/oc_splitter_service'
+require 'register_ingester_oc/config/adapters'
 
 module RegisterIngesterOc
   module Apps
@@ -18,7 +18,7 @@ module RegisterIngesterOc
 
       def initialize(
         s3_bucket: ENV.fetch('ATHENA_S3_BUCKET'),
-        splitter_service: Services::OcSplitterService.new,
+        stream_uploader_service: nil,
         split_size: DEFAULT_SPLIT_SIZE,
         max_lines: DEFAULT_MAX_LINES,
         companies_s3_prefix: ENV.fetch('COMPANIES_BULK_DATA_S3_PREFIX'),
@@ -26,7 +26,9 @@ module RegisterIngesterOc
         add_ids_s3_prefix: ENV.fetch('ADD_IDS_BULK_DATA_S3_PREFIX')
       )
         @s3_bucket = s3_bucket
-        @splitter_service = splitter_service
+        @stream_uploader_service = stream_uploader_service || RegisterCommon::Services::StreamUploaderService.new(
+          s3_adapter: Config::Adapters::S3_ADAPTER
+        )
         @split_size = split_size
         @max_lines = max_lines
         @companies_s3_prefix = companies_s3_prefix
@@ -39,7 +41,7 @@ module RegisterIngesterOc
         dst_prefix = File.join(s3_prefix, "mth=#{month}")
 
         File.open(local_path, 'rb') do |stream|
-          splitter_service.split_file(
+          stream_uploader_service.upload_in_parts(
             stream,
             s3_bucket: s3_bucket,
             s3_prefix: dst_prefix,
@@ -51,7 +53,7 @@ module RegisterIngesterOc
 
       private
 
-      attr_reader :s3_bucket, :s3_prefix, :splitter_service, :split_size, :max_lines
+      attr_reader :s3_bucket, :s3_prefix, :stream_uploader_service, :split_size, :max_lines
       attr_reader :companies_s3_prefix, :alt_names_s3_prefix, :add_ids_s3_prefix
 
       def select_s3_prefix(oc_source)

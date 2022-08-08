@@ -32,5 +32,6 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency 'dotenv'
 
+  spec.add_dependency 'activesupport'
   spec.add_dependency 'aws-sdk-athena'
 end

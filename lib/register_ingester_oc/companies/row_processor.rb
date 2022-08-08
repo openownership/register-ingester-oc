@@ -1,14 +1,14 @@
-require 'register_ingester_oc/utils/generic_reader'
 require 'register_sources_oc/structs/company'
 
 module RegisterIngesterOc
   module Companies
-    class Reader < Utils::GenericReader
-      private
-
+    class RowProcessor
       def process_row(row)
-        registered_address_in_full = row['registered_address.in_full'].presence && row['registered_address.in_full'].presence.gsub("\\n", "\n")
-        registered_address_country = row['registered_address.country'].presence
+        row = row.transform_values { |v| (v == '') ? nil : v }
+        row = row.transform_keys(&:to_sym)
+
+        registered_address_in_full = row[:'registered_address.in_full'] && row[:'registered_address.in_full'].gsub("\\n", "\n")
+        registered_address_country = row[:'registered_address.country']
 
         # Bulk is inconsistent with API as the registered_address.in_full includes country
         # This strips it out to make it match
@@ -19,13 +19,13 @@ module RegisterIngesterOc
         end
 
         RegisterSourcesOc::Company.new(
-          company_number: row['company_number'].presence,
-          jurisdiction_code: row['jurisdiction_code'].presence,
-          name: row['name'].presence,
-          company_type: row['company_type'].presence,
-          incorporation_date: row['incorporation_date'].presence,
-          dissolution_date: row['dissolution_date'].presence,
-          restricted_for_marketing: row['restricted_for_marketing'],
+          company_number: row[:company_number],
+          jurisdiction_code: row[:jurisdiction_code],
+          name: row[:name],
+          company_type: row[:company_type],
+          incorporation_date: row[:incorporation_date],
+          dissolution_date: row[:dissolution_date],
+          restricted_for_marketing: row[:restricted_for_marketing],
           registered_address_in_full: registered_address_in_full,
           registered_address_country: registered_address_country
         )

@@ -8,7 +8,7 @@ GIT
 
 GIT
   remote: git@github.com:openownership/register-sources-oc.git
-  revision: 15adc19b87ae465c1e7a4f25d98f521c61756261
+  revision: 12c51af49f194241427b67ccb45f994f77048708
   specs:
     register_sources_oc (0.1.0)
       activesupport (~> 6.1.4.1)
@@ -27,6 +27,7 @@ PATH
   remote: .
   specs:
     register_ingester_oc (0.1.0)
+      activesupport
       aws-sdk-athena
       dotenv
 

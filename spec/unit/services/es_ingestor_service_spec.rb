@@ -3,6 +3,7 @@ require 'register_ingester_oc/services/es_ingestor_service'
 RSpec.describe RegisterIngesterOc::Services::EsIngestorService do
   subject do
     described_class.new(
+      row_processor: row_processor,
       file_reader: file_reader,
       repository: repository,
       s3_adapter: s3_adapter,
@@ -11,6 +12,7 @@ RSpec.describe RegisterIngesterOc::Services::EsIngestorService do
     )
   end
 
+  let(:row_processor) { double 'row_processor' }
   let(:file_reader) { double 'file_reader' }
   let(:repository) { double 'repository' }
   let(:s3_adapter) { double 's3_adapter' }
@@ -25,21 +27,27 @@ RSpec.describe RegisterIngesterOc::Services::EsIngestorService do
     ).and_return s3_paths
 
     record1 = double 'record1'
-    expect(file_reader).to receive(:import_from_s3).with(
+    mapped_record1 = double 'mapped_record1'
+    expect(file_reader).to receive(:read_from_s3).with(
       s3_bucket: s3_bucket,
       s3_path: s3_paths[0],
-      file_format: 'json'
-    ).and_yield record1
+      file_format: RegisterCommon::Parsers::FileFormats::JSON,
+      compression: RegisterCommon::Decompressors::CompressionTypes::GZIP
+    ).and_yield [record1]
+    expect(row_processor).to receive(:process_row).with(record1).and_return mapped_record1
 
     record2 = double 'record2'
-    expect(file_reader).to receive(:import_from_s3).with(
+    mapped_record2 = double 'mapped_record2'
+    expect(file_reader).to receive(:read_from_s3).with(
       s3_bucket: s3_bucket,
       s3_path: s3_paths[1],
-      file_format: 'json'
-    ).and_yield record2
-    
-    expect(repository).to receive(:store).with(record1)
-    expect(repository).to receive(:store).with(record2)
+      file_format: RegisterCommon::Parsers::FileFormats::JSON,
+      compression: RegisterCommon::Decompressors::CompressionTypes::GZIP
+    ).and_yield [record2]
+    expect(row_processor).to receive(:process_row).with(record2).and_return mapped_record2
+
+    expect(repository).to receive(:store).with([mapped_record1])
+    expect(repository).to receive(:store).with([mapped_record2])
 
     subject.call '2022_07'
   end

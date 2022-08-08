@@ -1,12 +1,12 @@
 require 'register_ingester_oc/services/es_ingestor_service'
 require 'register_sources_oc/repositories/alt_name_repository'
-require 'register_ingester_oc/alt_names/file_reader'
+require 'register_ingester_oc/alt_names/row_processor'
 
 module RegisterIngesterOc
   module AltNames
     class EsIngestorService < Services::EsIngestorService
       def initialize(
-        file_reader: AltNames::FileReader.new,
+        row_processor: AltNames::RowProcessor.new,
         repository: RegisterSourcesOc::Repositories::AltNameRepository.new(client: Config::ELASTICSEARCH_CLIENT),
         s3_adapter: Config::Adapters::S3_ADAPTER,
         s3_bucket: ENV.fetch('ATHENA_S3_BUCKET'),
