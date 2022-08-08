@@ -32,9 +32,5 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency 'dotenv'
 
-  spec.add_dependency 'net-sftp'
-  spec.add_dependency 'ed25519', '~> 1'
-  spec.add_dependency 'bcrypt_pbkdf', '~> 1'
-  spec.add_dependency 'aws-sdk-s3', '~> 1.105.1'
   spec.add_dependency 'aws-sdk-athena'
 end

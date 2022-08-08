@@ -7,6 +7,8 @@ end
 require "register_ingester_oc"
 require 'webmock/rspec'
 
+RSpec::Support::ObjectFormatter.default_instance.max_formatted_output_length = nil
+
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure
   config.example_status_persistence_file_path = ".rspec_status"

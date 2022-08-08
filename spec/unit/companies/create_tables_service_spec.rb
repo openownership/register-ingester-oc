@@ -81,10 +81,10 @@ latest_accounts_liabilities STRING
 SQL
       create_raw_execution_id = double 'create_raw_execution_id'
       create_raw_execution = double 'create_raw', query_execution_id: create_raw_execution_id
-      expect(athena_adapter).to receive(:start_query_execution).with(
+      expect(athena_adapter).to receive(:start_query_execution).with({
         query_string: create_raw_query,
         result_configuration: { output_location: "s3://s3_bucket/athena_results" }
-      ).and_return create_raw_execution
+      }).and_return create_raw_execution
       expect(athena_adapter).to receive(:wait_for_query).with create_raw_execution_id
 
       # Create processed table query
@@ -148,10 +148,10 @@ TBLPROPERTIES (
 SQL
       create_processed_execution_id = double 'create_processed_execution_id'
       create_processed_execution = double 'create_processed', query_execution_id: create_processed_execution_id
-      expect(athena_adapter).to receive(:start_query_execution).with(
+      expect(athena_adapter).to receive(:start_query_execution).with({
         query_string: create_processed_query,
         result_configuration: { output_location: "s3://s3_bucket/athena_results" }
-      ).and_return create_processed_execution
+      }).and_return create_processed_execution
       expect(athena_adapter).to receive(:wait_for_query).with create_processed_execution_id
 
       # Create filtered query
@@ -180,10 +180,10 @@ TBLPROPERTIES (
 SQL
       create_filtered_execution_id = double 'create_filtered_execution_id'
       create_filtered_execution = double 'create_filtered', query_execution_id: create_filtered_execution_id
-      expect(athena_adapter).to receive(:start_query_execution).with(
+      expect(athena_adapter).to receive(:start_query_execution).with({
         query_string: create_filtered_query,
         result_configuration: { output_location: "s3://s3_bucket/athena_results" }
-      ).and_return create_filtered_execution
+      }).and_return create_filtered_execution
       expect(athena_adapter).to receive(:wait_for_query).with create_filtered_execution_id
 
       subject.call
