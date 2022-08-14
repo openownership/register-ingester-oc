@@ -1,4 +1,5 @@
 require 'register_common/services/stream_uploader_service'
+require 'register_common/decompressors/decompressor'
 require 'register_ingester_oc/exceptions'
 require 'register_ingester_oc/config/adapters'
 
@@ -21,11 +22,13 @@ module RegisterIngesterOc
         stream_uploader_service: nil,
         split_size: DEFAULT_SPLIT_SIZE,
         max_lines: DEFAULT_MAX_LINES,
+        stream_decompressor: nil,
         companies_s3_prefix: ENV.fetch('COMPANIES_BULK_DATA_S3_PREFIX'),
         alt_names_s3_prefix: ENV.fetch('ALT_NAMES_BULK_DATA_S3_PREFIX'),
         add_ids_s3_prefix: ENV.fetch('ADD_IDS_BULK_DATA_S3_PREFIX')
       )
         @s3_bucket = s3_bucket
+        @stream_decompressor = stream_decompressor || RegisterCommon::Decompressors::Decompressor.new
         @stream_uploader_service = stream_uploader_service || RegisterCommon::Services::StreamUploaderService.new(
           s3_adapter: Config::Adapters::S3_ADAPTER
         )
@@ -41,14 +44,16 @@ module RegisterIngesterOc
         dst_prefix = File.join(s3_prefix, "mth=#{month}")
 
         File.open(local_path, 'rb') do |stream|
-          stream_uploader_service.upload_in_parts(
-            stream,
-            s3_bucket: s3_bucket,
-            s3_prefix: dst_prefix,
-            split_size: split_size,
-            max_lines: max_lines
-          )
-        end        
+          stream_decompressor.with_deflated_stream(stream, compression: CompressionTypes::GZIP) do |deflated|
+            stream_uploader_service.upload_in_parts(
+              deflated,
+              s3_bucket: s3_bucket,
+              s3_prefix: dst_prefix,
+              split_size: split_size,
+              max_lines: max_lines
+            )
+          end
+        end
       end
 
       private

@@ -1,9 +1,12 @@
 GIT
   remote: git@github.com:openownership/register-common.git
-  revision: 3ef1d97fe367a31eda0e224cef76ab43bbdee955
+  revision: caadc47e98489586a10940f34a517fe7db929188
   specs:
     register_common (0.1.0)
+      activesupport
+      aws-sdk-athena
       aws-sdk-s3 (~> 1.105.1)
+      dotenv
       rubyzip (~> 2.3.2)
 
 GIT
@@ -27,9 +30,6 @@ PATH
   remote: .
   specs:
     register_ingester_oc (0.1.0)
-      activesupport
-      aws-sdk-athena
-      dotenv
 
 GEM
   remote: https://rubygems.org/
@@ -43,11 +43,11 @@ GEM
     addressable (2.8.0)
       public_suffix (>= 2.0.2, < 5.0)
     aws-eventstream (1.2.0)
-    aws-partitions (1.615.0)
+    aws-partitions (1.618.0)
     aws-sdk-athena (1.56.0)
       aws-sdk-core (~> 3, >= 3.127.0)
       aws-sigv4 (~> 1.1)
-    aws-sdk-core (3.131.6)
+    aws-sdk-core (3.132.0)
       aws-eventstream (~> 1, >= 1.0.2)
       aws-partitions (~> 1, >= 1.525.0)
       aws-sigv4 (~> 1.1)
