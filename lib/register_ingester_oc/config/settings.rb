@@ -27,9 +27,9 @@ module RegisterIngesterOc
     )
 
     AWS_CREDENTIALS = AwsCredentialsStruct.new(
-      ENV.fetch('INGESTER_AWS_REGION'),
-      ENV.fetch('INGESTER_AWS_ACCESS_KEY_ID'),
-      ENV.fetch('INGESTER_AWS_SECRET_ACCESS_KEY')
+      ENV.fetch('BODS_AWS_REGION'),
+      ENV.fetch('BODS_AWS_ACCESS_KEY_ID'),
+      ENV.fetch('BODS_AWS_SECRET_ACCESS_KEY')
     )
   end
 end
