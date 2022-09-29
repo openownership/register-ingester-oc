@@ -44,7 +44,7 @@ module RegisterIngesterOc
         dst_prefix = File.join(s3_prefix, "mth=#{month}")
 
         File.open(local_path, 'rb') do |stream|
-          stream_decompressor.with_deflated_stream(stream, compression: CompressionTypes::GZIP) do |deflated|
+          stream_decompressor.with_deflated_stream(stream, compression: RegisterCommon::Decompressors::CompressionTypes::GZIP) do |deflated|
             stream_uploader_service.upload_in_parts(
               deflated,
               s3_bucket: s3_bucket,
@@ -59,7 +59,7 @@ module RegisterIngesterOc
       private
 
       attr_reader :s3_bucket, :s3_prefix, :stream_uploader_service, :split_size, :max_lines
-      attr_reader :companies_s3_prefix, :alt_names_s3_prefix, :add_ids_s3_prefix
+      attr_reader :companies_s3_prefix, :alt_names_s3_prefix, :add_ids_s3_prefix, :stream_decompressor
 
       def select_s3_prefix(oc_source)
         case oc_source
