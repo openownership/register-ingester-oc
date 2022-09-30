@@ -1,6 +1,6 @@
 # Register Ingester OC
 
-This is an application for ingesting the Open Corporates Bulk data published monthly into an Elasticsearch database.
+This is an application for ingesting the OpenCorporates bulk data published monthly into an Elasticsearch database.
 
 ## One-time Setup
 
