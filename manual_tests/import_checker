@@ -9,25 +9,23 @@ require 'register_sources_oc/repositories/add_id_repository'
 require 'register_sources_oc/repositories/company_repository'
 
 alt_name_repository = RegisterSourcesOc::Repositories::AltNameRepository.new(
-  client: RegisterIngesterOc::Config::ELASTICSEARCH_CLIENT
+  client: RegisterIngesterOc::Config::ELASTICSEARCH_CLIENT,
 )
 
-add_id_repository = RegisterSourcesOc::Repositories::AddIdRepository.new(
-  client: RegisterIngesterOc::Config::ELASTICSEARCH_CLIENT
+RegisterSourcesOc::Repositories::AddIdRepository.new(
+  client: RegisterIngesterOc::Config::ELASTICSEARCH_CLIENT,
 )
 
 company_repository = RegisterSourcesOc::Repositories::AddIdRepository.new(
-  client: RegisterIngesterOc::Config::ELASTICSEARCH_CLIENT
+  client: RegisterIngesterOc::Config::ELASTICSEARCH_CLIENT,
 )
 
 print "ALT NAME: ", alt_name_repository.search_by_number(
   jurisdiction_code: 'dk',
-  company_number: '29601011'
+  company_number: '29601011',
 ), "\n"
-
 
 print "COMPANIES: ", company_repository.search_by_number(
   jurisdiction_code: 'dk',
-  company_number: '29601011'
+  company_number: '29601011',
 ), "\n"
-

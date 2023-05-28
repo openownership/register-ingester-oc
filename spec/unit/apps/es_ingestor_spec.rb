@@ -3,9 +3,9 @@ require 'register_ingester_oc/apps/es_ingestor'
 RSpec.describe RegisterIngesterOc::Apps::EsIngestor do
   subject do
     described_class.new(
-      companies_ingestor_service: companies_ingestor_service,
-      alt_names_ingestor_service: alt_names_ingestor_service,
-      add_ids_ingestor_service: add_ids_ingestor_service
+      companies_ingestor_service:,
+      alt_names_ingestor_service:,
+      add_ids_ingestor_service:,
     )
   end
 
@@ -57,11 +57,11 @@ RSpec.describe RegisterIngesterOc::Apps::EsIngestor do
       let(:oc_source) { 'unknown_source' }
 
       it 'raises an error' do
-        expect {
+        expect do
           subject.call(oc_source, month)
-        }.to raise_error RegisterIngesterOc::UnknownOcSourceError
+        end.to raise_error RegisterIngesterOc::UnknownOcSourceError
       end
-    end    
+    end
   end
 
   describe '#bash_call' do

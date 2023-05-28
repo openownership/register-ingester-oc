@@ -29,17 +29,16 @@ module RegisterIngesterOc
       end
 
       def s3_export_location_full(month)
-        File.join("s3://#{s3_bucket}", full_s3_prefix, "mth=#{month}") + '/'
+        "#{File.join("s3://#{s3_bucket}", full_s3_prefix, "mth=#{month}")}/"
       end
 
       def s3_export_location_diffs(month)
-        File.join("s3://#{s3_bucket}", diffs_s3_prefix, "mth=#{month}") + '/'
+        "#{File.join("s3://#{s3_bucket}", diffs_s3_prefix, "mth=#{month}")}/"
       end
 
       private
 
-      attr_reader :athena_adapter, :athena_database, :s3_bucket, :output_location
-      attr_reader :filtered_table_name, :full_s3_prefix, :diffs_s3_prefix
+      attr_reader :athena_adapter, :athena_database, :s3_bucket, :output_location, :filtered_table_name, :full_s3_prefix, :diffs_s3_prefix
 
       def export_all_json(month)
         dst_table_name = "oc_export_full_#{month}"
@@ -114,12 +113,14 @@ module RegisterIngesterOc
       end
 
       def execute_sql(sql_query)
-        athena_query = athena_adapter.start_query_execution({
-          query_string: sql_query,
-          result_configuration: {
-            output_location: output_location
-          }
-        })
+        athena_query = athena_adapter.start_query_execution(
+          {
+            query_string: sql_query,
+            result_configuration: {
+              output_location:,
+            },
+          },
+        )
         athena_adapter.wait_for_query(athena_query.query_execution_id)
       end
 
@@ -128,14 +129,14 @@ module RegisterIngesterOc
         if month_split.length != 2
           raise 'wrong month format'
         end
-        
+
         year_i = month_split[0].to_i
         month_i = month_split[1].to_i
 
-        prev_year_i = (month_i == 1) ? (year_i-1) : year_i
-        prev_month_i = (month_i == 1) ? 12 : (month_i-1)
+        prev_year_i = month_i == 1 ? (year_i - 1) : year_i
+        prev_month_i = month_i == 1 ? 12 : (month_i - 1)
 
-        "%d_%02d" % [prev_year_i, prev_month_i]
+        format("%d_%02d", prev_year_i, prev_month_i)
       end
     end
   end

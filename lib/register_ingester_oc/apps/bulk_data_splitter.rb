@@ -14,7 +14,7 @@ module RegisterIngesterOc
         month = args[1]
         local_path = args[2]
 
-        BulkDataSplitter.new.call(month: month, local_path: local_path, oc_source: oc_source)
+        BulkDataSplitter.new.call(month:, local_path:, oc_source:)
       end
 
       def initialize(
@@ -30,7 +30,7 @@ module RegisterIngesterOc
         @s3_bucket = s3_bucket
         @stream_decompressor = stream_decompressor || RegisterCommon::Decompressors::Decompressor.new
         @stream_uploader_service = stream_uploader_service || RegisterCommon::Services::StreamUploaderService.new(
-          s3_adapter: Config::Adapters::S3_ADAPTER
+          s3_adapter: Config::Adapters::S3_ADAPTER,
         )
         @split_size = split_size
         @max_lines = max_lines
@@ -47,10 +47,10 @@ module RegisterIngesterOc
           stream_decompressor.with_deflated_stream(stream, compression: RegisterCommon::Decompressors::CompressionTypes::GZIP) do |deflated|
             stream_uploader_service.upload_in_parts(
               deflated,
-              s3_bucket: s3_bucket,
+              s3_bucket:,
               s3_prefix: dst_prefix,
-              split_size: split_size,
-              max_lines: max_lines
+              split_size:,
+              max_lines:,
             )
           end
         end
@@ -58,8 +58,7 @@ module RegisterIngesterOc
 
       private
 
-      attr_reader :s3_bucket, :s3_prefix, :stream_uploader_service, :split_size, :max_lines
-      attr_reader :companies_s3_prefix, :alt_names_s3_prefix, :add_ids_s3_prefix, :stream_decompressor
+      attr_reader :s3_bucket, :s3_prefix, :stream_uploader_service, :split_size, :max_lines, :companies_s3_prefix, :alt_names_s3_prefix, :add_ids_s3_prefix, :stream_decompressor
 
       def select_s3_prefix(oc_source)
         case oc_source

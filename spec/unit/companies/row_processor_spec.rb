@@ -12,8 +12,8 @@ RSpec.describe RegisterIngesterOc::Companies::RowProcessor do
       incorporation_date: '2020-09-01',
       dissolution_date: '2022-04-01',
       restricted_for_marketing: nil,
-      :"registered_address.in_full" => 'registered address',
-      :"registered_address.country" => 'country',
+      'registered_address.in_full': 'registered address',
+      'registered_address.country': 'country',
     }
   end
 

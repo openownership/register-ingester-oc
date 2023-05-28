@@ -8,7 +8,7 @@ RSpec.describe RegisterIngesterOc::AddIds::RowProcessor do
       company_number: '123',
       jurisdiction_code: '',
       uid: 'uid',
-      identifier_system_code: 'identifier_system_code'
+      identifier_system_code: 'identifier_system_code',
     }
   end
 
@@ -18,7 +18,7 @@ RSpec.describe RegisterIngesterOc::AddIds::RowProcessor do
         company_number: '123',
         jurisdiction_code: nil,
         uid: 'uid',
-        identifier_system_code: 'identifier_system_code'
+        identifier_system_code: 'identifier_system_code',
       )
     end
 

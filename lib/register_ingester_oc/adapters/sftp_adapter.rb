@@ -1,4 +1,3 @@
-
 module RegisterIngesterOc
   module Adapters
     class SftpAdapter

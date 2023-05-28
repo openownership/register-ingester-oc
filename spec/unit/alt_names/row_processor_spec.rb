@@ -10,7 +10,7 @@ RSpec.describe RegisterIngesterOc::AltNames::RowProcessor do
       name: 'name',
       type: 'type',
       start_date: '2020-07-26',
-      end_date: '2021-09-12'
+      end_date: '2021-09-12',
     }
   end
 
@@ -22,7 +22,7 @@ RSpec.describe RegisterIngesterOc::AltNames::RowProcessor do
         name: 'name',
         type: 'type',
         start_date: '2020-07-26',
-        end_date: '2021-09-12'
+        end_date: '2021-09-12',
       )
     end
 

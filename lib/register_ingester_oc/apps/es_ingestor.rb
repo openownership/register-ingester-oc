@@ -12,7 +12,7 @@ module RegisterIngesterOc
         oc_source = args[0]
         month = args[1]
 
-        new().call(oc_source, month)
+        new.call(oc_source, month)
       end
 
       def initialize(

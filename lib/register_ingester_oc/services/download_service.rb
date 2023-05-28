@@ -18,8 +18,8 @@ module RegisterIngesterOc
           host: settings.OC_HOST,
           username: settings.OC_USERNAME,
           password: settings.OC_PASSWORD,
-          rem_path: rem_path,
-          dst_path: dst_path
+          rem_path:,
+          dst_path:,
         )
       end
 

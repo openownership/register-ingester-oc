@@ -2,7 +2,7 @@ require 'register_ingester_oc/apps/oc_downloader'
 
 RSpec.describe RegisterIngesterOc::Apps::OcDownloader do
   subject do
-    described_class.new(download_service: download_service)
+    described_class.new(download_service:)
   end
 
   let(:download_service) { double 'download_service' }
@@ -25,7 +25,7 @@ RSpec.describe RegisterIngesterOc::Apps::OcDownloader do
         expect(download_service).to have_received(:download).with(
           month,
           dst_path,
-          filename: 'companies.csv.gz'
+          filename: 'companies.csv.gz',
         )
       end
     end
@@ -39,7 +39,7 @@ RSpec.describe RegisterIngesterOc::Apps::OcDownloader do
         expect(download_service).to have_received(:download).with(
           month,
           dst_path,
-          filename: 'additional_identifiers.csv.gz'
+          filename: 'additional_identifiers.csv.gz',
         )
       end
     end
@@ -53,7 +53,7 @@ RSpec.describe RegisterIngesterOc::Apps::OcDownloader do
         expect(download_service).to have_received(:download).with(
           month,
           dst_path,
-          filename: 'alternative_names.csv.gz'
+          filename: 'alternative_names.csv.gz',
         )
       end
     end
@@ -62,11 +62,11 @@ RSpec.describe RegisterIngesterOc::Apps::OcDownloader do
       let(:oc_source) { 'unknown_source' }
 
       it 'raises an error' do
-        expect {
+        expect do
           subject.call(oc_source, month, dst_path)
-        }.to raise_error RegisterIngesterOc::UnknownOcSourceError
+        end.to raise_error RegisterIngesterOc::UnknownOcSourceError
       end
-    end    
+    end
   end
 
   describe '#bash_call' do

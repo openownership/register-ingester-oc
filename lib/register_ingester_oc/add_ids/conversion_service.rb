@@ -4,7 +4,7 @@ require 'register_ingester_oc/config/settings'
 module RegisterIngesterOc
   module AddIds
     class ConversionService
-      DEFAULT_JURISDICTION_CODES = ['gb', 'dk', 'sk']
+      DEFAULT_JURISDICTION_CODES = %w[gb dk sk].freeze
 
       def initialize(
         athena_adapter: Config::Adapters::ATHENA_ADAPTER,
@@ -36,8 +36,7 @@ module RegisterIngesterOc
 
       private
 
-      attr_reader :athena_adapter, :athena_database, :s3_bucket, :output_location
-      attr_reader :raw_table_name, :processed_table_name, :filtered_table_name
+      attr_reader :athena_adapter, :athena_database, :s3_bucket, :output_location, :raw_table_name, :processed_table_name, :filtered_table_name
 
       def discover_partitions(table_name)
         query = <<~SQL

@@ -3,9 +3,9 @@ require 'register_ingester_oc/apps/oc_exporter'
 RSpec.describe RegisterIngesterOc::Apps::OcExporter do
   subject do
     described_class.new(
-      companies_exporter_service: companies_exporter_service,
-      alt_names_exporter_service: alt_names_exporter_service,
-      add_ids_exporter_service: add_ids_exporter_service
+      companies_exporter_service:,
+      alt_names_exporter_service:,
+      add_ids_exporter_service:,
     )
   end
 
@@ -57,11 +57,11 @@ RSpec.describe RegisterIngesterOc::Apps::OcExporter do
       let(:oc_source) { 'unknown_source' }
 
       it 'raises an error' do
-        expect {
+        expect do
           subject.call(oc_source, month)
-        }.to raise_error RegisterIngesterOc::UnknownOcSourceError
+        end.to raise_error RegisterIngesterOc::UnknownOcSourceError
       end
-    end    
+    end
   end
 
   describe '#bash_call' do
