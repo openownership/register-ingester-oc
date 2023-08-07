@@ -8,4 +8,9 @@ gem 'webmock'
 gem 'register_common',     git: 'https://github.com/openownership/register-common.git'
 gem 'register_sources_oc', git: 'https://github.com/openownership/register-sources-oc.git'
 
+group :development do
+  gem 'rubocop',       require: false
+  gem 'rubocop-rspec', require: false
+end
+
 gemspec
