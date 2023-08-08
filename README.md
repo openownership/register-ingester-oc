@@ -2,93 +2,108 @@
 
 This is an application for ingesting the OpenCorporates bulk data published monthly into an Elasticsearch database.
 
-## One-time Setup
+## Installation
 
-Create a .env file with the keys populated from the .env.example file.
+Install and boot [register-v2](https://github.com/openownership/register-v2).
 
-### Create ES indexes
+Configure your environment using the example file:
 
-```shell
-bin/run es_index_creator
+```sh
+cp .env.example .env
+```
+
+Install and boot:
+
+```sh
+docker compose up
+```
+
+Create the Elasticsearch indexes:
+
+```sh
+docker compose exec ingester-oc es_index_creator
 ```
 
 ## Ingesting Bulk Data
 
-### 1. Download file
+Find the directory relating to the data to download, e.g. `2022-09-01`. This is then used in subsequent commands.
 
-You will be prompted for your SFTP password for the OpenCorporates download.
+You will be prompted for your SFTP password for the OpenCorporates download (regardless of `OPENCORPORATES_SFTP_PASSWORD`).
 
-```shell
-bin/run download_from_oc companies {REM_FOLDER_NAME} {LOCAL_PATH}
-bin/run download_from_oc companies /oc-sftp-prod/open_ownership/2022-09-01 /storage/oc_file_companies
+### Companies
+
+#### 1. Download file
+
+```sh
+docker compose exec ingester-oc download_from_oc companies /oc-sftp-prod/open_ownership/2022-09-01 storage/oc_file_companies
 ```
 
-### 2. Split and upload file in Gzipped parts to S3
+#### 2. Split and upload file in Gzipped parts to S3
 
-```shell
-bin/run upload_split_bulk_data companies {MONTH} {LOCAL_PATH}
-bin/run upload_split_bulk_data companies 2022_09 /storage/oc_file_companies
+```sh
+docker compose exec ingester-oc upload_split_bulk_data companies 2022_09 storage/oc_file_companies
 ```
 
-### 3. Create Athena tables
+#### 3. Create Athena tables
 
 Create Athena tables if not already created
 
-```shell
-bin/run create_tables companies
+```sh
+docker compose exec ingester-oc create_tables companies
 ```
 
-### 4. Convert OC bulk data using Athena
+#### 4. Convert OC bulk data using Athena
 
-```shell
-bin/run convert_oc_data companies 2022_09
+```sh
+docker compose exec ingester-oc convert_oc_data companies 2022_09
 ```
 
-### 5. Export OC bulk data for ingest into Elasticsearch
+#### 5. Export OC bulk data for ingest into Elasticsearch
 
-```shell
-bin/run export_oc_data companies 2022_09
+```sh
+docker compose exec ingester-oc export_oc_data companies 2022_09
 ```
 
-### 6. Ingest S3 exported files into Elasticsearch
+#### 6. Ingest S3 exported files into Elasticsearch
 
 To import the full data for a month:
-```shell
-bin/run ingest_into_es companies 2022_09
+
+```sh
+docker compose exec ingester-oc ingest_into_es companies 2022_09
 ```
 
-# Alternate Names
+### Additional Identifiers
 
-## One-time Setup
+#### One-time Setup
 
 ```shell
-bin/run create_tables add_ids
+docker compose exec ingester-oc create_tables add_ids
 ```
 
-## Monthly Import
+#### Monthly Import
 
 ```shell
-bin/run download_from_oc add_ids /oc-sftp-prod/open_ownership/2022-07-04 /storage/oc_file_add_ids
-bin/run upload_split_bulk_data add_ids 2022_09 /storage/oc_file_add_ids
-bin/run convert_oc_data add_ids 2022_09
-bin/run export_oc_data add_ids 2022_09
-bin/run ingest_into_es add_ids 2022_09
+docker compose exec ingester-oc download_from_oc add_ids /oc-sftp-prod/open_ownership/2022-07-04 storage/oc_file_add_ids
+docker compose exec ingester-oc upload_split_bulk_data add_ids 2022_09 storage/oc_file_add_ids
+docker compose exec ingester-oc convert_oc_data add_ids 2022_09
+docker compose exec ingester-oc export_oc_data add_ids 2022_09
+docker compose exec ingester-oc ingest_into_es add_ids 2022_09
 ```
 
-# Additional Identifiers
+### Alternate Names
 
-## One-time Setup
+#### One-time Setup
 
 ```shell
-bin/run create_tables alt_names
+docker compose exec ingester-oc create_tables alt_names
 ```
 
-## Monthly Import
+#### Monthly Import
 
 ```shell
-bin/run download_from_oc alt_names /oc-sftp-prod/open_ownership/2022-07-04 /storage/oc_file_alt_names
-bin/run upload_split_bulk_data alt_names 2022_09 /storage/oc_file_alt_names
-bin/run convert_oc_data alt_names 2022_09
-bin/run export_oc_data alt_names 2022_09
-bin/run ingest_into_es alt_names 2022_09
+docker compose exec ingester-oc download_from_oc alt_names /oc-sftp-prod/open_ownership/2022-07-04 storage/oc_file_alt_names
+docker compose exec ingester-oc upload_split_bulk_data alt_names 2022_09 storage/oc_file_alt_names
+docker compose exec ingester-oc convert_oc_data alt_names 2022_09
+docker compose exec ingester-oc export_oc_data alt_names 2022_09
+docker compose exec ingester-oc ingest_into_es alt_names 2022_09
 ```
