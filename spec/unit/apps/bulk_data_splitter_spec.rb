@@ -4,6 +4,7 @@ RSpec.describe RegisterIngesterOc::Apps::BulkDataSplitter do
   subject do
     described_class.new(
       s3_bucket: s3_bucket,
+      stream_decompressor: stream_decompressor,
       stream_uploader_service: stream_uploader_service,
       split_size: split_size,
       max_lines: max_lines,
@@ -17,6 +18,7 @@ RSpec.describe RegisterIngesterOc::Apps::BulkDataSplitter do
   let(:companies_s3_prefix) { 'example/companies_s3_prefix' }
   let(:alt_names_s3_prefix) { 'example/alt_names_s3_prefix' }
   let(:add_ids_s3_prefix) { 'example/add_ids_s3_prefix' }
+  let(:stream_decompressor) { double 'stream_decompressor' }
   let(:stream_uploader_service) { double 'stream_uploader_service' }
   let(:split_size) { double 'split_size' }
   let(:max_lines) { double 'max_lines' }
@@ -27,10 +29,12 @@ RSpec.describe RegisterIngesterOc::Apps::BulkDataSplitter do
 
   describe '#call' do
     let(:stream) { double 'stream' }
+    let(:stream_compressed) { double 'stream_compressed' }
 
     before do
-      allow(File).to receive(:open).with(local_path, 'rb').and_yield stream
+      allow(File).to receive(:open).with(local_path, 'rb').and_yield stream_compressed
       allow(stream_uploader_service).to receive(:upload_in_parts)
+      allow(stream_decompressor).to receive(:with_deflated_stream).with(stream_compressed, compression: "gzip").and_yield stream
     end
 
     context 'when oc_source is companies' do
