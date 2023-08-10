@@ -1,5 +1,7 @@
 #!/usr/bin/env ruby
 
+require 'bundler/setup'
+
 require 'register_ingester_oc/apps/oc_downloader'
 
 RegisterIngesterOc::Apps::OcDownloader.bash_call ARGV

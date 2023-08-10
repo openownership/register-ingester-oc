@@ -1,5 +1,7 @@
 #!/usr/bin/env ruby
 
+require 'bundler/setup'
+
 require 'register_ingester_oc/apps/oc_exporter'
 
 RegisterIngesterOc::Apps::OcExporter.bash_call ARGV

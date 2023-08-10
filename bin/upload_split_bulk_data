@@ -1,5 +1,7 @@
 #!/usr/bin/env ruby
 
+require 'bundler/setup'
+
 require 'register_ingester_oc/apps/bulk_data_splitter'
 
 RegisterIngesterOc::Apps::BulkDataSplitter.bash_call ARGV

@@ -1,5 +1,7 @@
 #!/usr/bin/env ruby
 
+require 'bundler/setup'
+
 require 'register_ingester_oc/config/settings'
 require 'register_sources_oc/services/es_index_creator'
 
