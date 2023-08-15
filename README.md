@@ -12,16 +12,10 @@ Configure your environment using the example file:
 cp .env.example .env
 ```
 
-Install and boot:
-
-```sh
-docker compose up
-```
-
 Create the Elasticsearch indexes:
 
 ```sh
-docker compose exec ingester-oc es_index_creator
+docker compose run ingester-oc es_index_creator
 ```
 
 ## Ingesting Bulk Data
@@ -35,13 +29,13 @@ You will be prompted for your SFTP password for the OpenCorporates download (reg
 #### 1. Download file
 
 ```sh
-docker compose exec ingester-oc download_from_oc companies /oc-sftp-prod/open_ownership/2022-09-01 storage/oc_file_companies
+docker compose run ingester-oc download_from_oc companies /oc-sftp-prod/open_ownership/2022-09-01 storage/oc_file_companies
 ```
 
 #### 2. Split and upload file in Gzipped parts to S3
 
 ```sh
-docker compose exec ingester-oc upload_split_bulk_data companies 2022_09 storage/oc_file_companies
+docker compose run ingester-oc upload_split_bulk_data companies 2022_09 storage/oc_file_companies
 ```
 
 #### 3. Create Athena tables
@@ -49,19 +43,19 @@ docker compose exec ingester-oc upload_split_bulk_data companies 2022_09 storage
 Create Athena tables if not already created
 
 ```sh
-docker compose exec ingester-oc create_tables companies
+docker compose run ingester-oc create_tables companies
 ```
 
 #### 4. Convert OC bulk data using Athena
 
 ```sh
-docker compose exec ingester-oc convert_oc_data companies 2022_09
+docker compose run ingester-oc convert_oc_data companies 2022_09
 ```
 
 #### 5. Export OC bulk data for ingest into Elasticsearch
 
 ```sh
-docker compose exec ingester-oc export_oc_data companies 2022_09
+docker compose run ingester-oc export_oc_data companies 2022_09
 ```
 
 #### 6. Ingest S3 exported files into Elasticsearch
@@ -69,7 +63,7 @@ docker compose exec ingester-oc export_oc_data companies 2022_09
 To import the full data for a month:
 
 ```sh
-docker compose exec ingester-oc ingest_into_es companies 2022_09
+docker compose run ingester-oc ingest_into_es companies 2022_09
 ```
 
 ### Additional Identifiers
@@ -77,17 +71,17 @@ docker compose exec ingester-oc ingest_into_es companies 2022_09
 #### One-time Setup
 
 ```shell
-docker compose exec ingester-oc create_tables add_ids
+docker compose run ingester-oc create_tables add_ids
 ```
 
 #### Monthly Import
 
 ```shell
-docker compose exec ingester-oc download_from_oc add_ids /oc-sftp-prod/open_ownership/2022-07-04 storage/oc_file_add_ids
-docker compose exec ingester-oc upload_split_bulk_data add_ids 2022_09 storage/oc_file_add_ids
-docker compose exec ingester-oc convert_oc_data add_ids 2022_09
-docker compose exec ingester-oc export_oc_data add_ids 2022_09
-docker compose exec ingester-oc ingest_into_es add_ids 2022_09
+docker compose run ingester-oc download_from_oc add_ids /oc-sftp-prod/open_ownership/2022-07-04 storage/oc_file_add_ids
+docker compose run ingester-oc upload_split_bulk_data add_ids 2022_09 storage/oc_file_add_ids
+docker compose run ingester-oc convert_oc_data add_ids 2022_09
+docker compose run ingester-oc export_oc_data add_ids 2022_09
+docker compose run ingester-oc ingest_into_es add_ids 2022_09
 ```
 
 ### Alternate Names
@@ -95,15 +89,15 @@ docker compose exec ingester-oc ingest_into_es add_ids 2022_09
 #### One-time Setup
 
 ```shell
-docker compose exec ingester-oc create_tables alt_names
+docker compose run ingester-oc create_tables alt_names
 ```
 
 #### Monthly Import
 
 ```shell
-docker compose exec ingester-oc download_from_oc alt_names /oc-sftp-prod/open_ownership/2022-07-04 storage/oc_file_alt_names
-docker compose exec ingester-oc upload_split_bulk_data alt_names 2022_09 storage/oc_file_alt_names
-docker compose exec ingester-oc convert_oc_data alt_names 2022_09
-docker compose exec ingester-oc export_oc_data alt_names 2022_09
-docker compose exec ingester-oc ingest_into_es alt_names 2022_09
+docker compose run ingester-oc download_from_oc alt_names /oc-sftp-prod/open_ownership/2022-07-04 storage/oc_file_alt_names
+docker compose run ingester-oc upload_split_bulk_data alt_names 2022_09 storage/oc_file_alt_names
+docker compose run ingester-oc convert_oc_data alt_names 2022_09
+docker compose run ingester-oc export_oc_data alt_names 2022_09
+docker compose run ingester-oc ingest_into_es alt_names 2022_09
 ```
