@@ -1,11 +1,3 @@
-require 'dotenv'
-
-if ENV['TEST'].to_i == 1
-  Dotenv.load('.test.env')
-else
-  Dotenv.load('.env')
-end
-
 module RegisterIngesterOc
   module Config
     SettingsStruct = Struct.new(
