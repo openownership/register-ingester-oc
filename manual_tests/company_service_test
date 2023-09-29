@@ -1,4 +1,5 @@
 #!/usr/bin/env ruby
+# frozen_string_literal: true
 
 require 'register_ingester_oc/config/elasticsearch'
 
@@ -9,14 +10,14 @@ company_repository = RegisterSourcesOc::Repositories::CompanyRepository.new(
 
 require 'register_sources_oc/services/bulk_data_company_service'
 bulk_data_company_service = RegisterSourcesOc::Services::BulkDataCompanyService.new(
-  company_repository: company_repository
+  company_repository:
 )
 
 require 'register_sources_oc/clients/open_corporate_client'
 open_corporate_client = RegisterSourcesOc::Clients::OpenCorporateClient.new_for_imports
 require 'register_sources_oc/services/oc_api_company_service'
-oc_api_company_service = RegisterSourcesOc::Services::OcApiCompanyService.new(
-  open_corporate_client: open_corporate_client
+RegisterSourcesOc::Services::OcApiCompanyService.new(
+  open_corporate_client:
 )
 
 require 'register_sources_oc/services/company_service'
@@ -29,7 +30,7 @@ company_service = RegisterSourcesOc::Services::CompanyService.new(
 )
 
 begin
-  print company_service.get_company('gb', 10052726), "\n"
-rescue => e
+  print company_service.get_company('gb', 10_052_726), "\n"
+rescue StandardError => e
   print "ERRORED: #{e}\n"
 end

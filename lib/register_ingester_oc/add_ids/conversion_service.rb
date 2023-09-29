@@ -1,11 +1,14 @@
+# frozen_string_literal: true
+
 require 'register_ingester_oc/config/adapters'
 require 'register_ingester_oc/config/settings'
 
 module RegisterIngesterOc
   module AddIds
     class ConversionService
-      DEFAULT_JURISDICTION_CODES = ['gb', 'dk', 'sk']
+      DEFAULT_JURISDICTION_CODES = %w[gb dk sk].freeze
 
+      # rubocop:disable Metrics/ParameterLists
       def initialize(
         athena_adapter: Config::Adapters::ATHENA_ADAPTER,
         athena_database: ENV.fetch('ATHENA_DATABASE'),
@@ -22,6 +25,7 @@ module RegisterIngesterOc
         @processed_table_name = processed_table_name
         @filtered_table_name = filtered_table_name
       end
+      # rubocop:enable Metrics/ParameterLists
 
       def call(month, jurisdiction_codes: DEFAULT_JURISDICTION_CODES)
         # Detect partitions (eg our new months data)
@@ -36,8 +40,8 @@ module RegisterIngesterOc
 
       private
 
-      attr_reader :athena_adapter, :athena_database, :s3_bucket, :output_location
-      attr_reader :raw_table_name, :processed_table_name, :filtered_table_name
+      attr_reader :athena_adapter, :athena_database, :s3_bucket, :output_location, :raw_table_name,
+                  :processed_table_name, :filtered_table_name
 
       def discover_partitions(table_name)
         query = <<~SQL
@@ -56,7 +60,7 @@ module RegisterIngesterOc
       end
 
       def filter_data(src_table_name, dst_table_name, month, jurisdiction_codes)
-        jurisdiction_codes_list = jurisdiction_codes.map { |code| "'#{code}'" }.join(", ")
+        jurisdiction_codes_list = jurisdiction_codes.map { |code| "'#{code}'" }.join(', ')
 
         query = <<~SQL
           INSERT INTO #{dst_table_name}

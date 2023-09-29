@@ -224,7 +224,7 @@ DEPENDENCIES
   register_common!
   register_ingester_oc!
   register_sources_oc!
-  rspec
+  rspec (~> 3.0)
   rubocop
   rubocop-rspec
   webmock

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'register_common/services/stream_uploader_service'
 require 'register_common/decompressors/decompressor'
 require 'register_ingester_oc/exceptions'
@@ -14,9 +16,10 @@ module RegisterIngesterOc
         month = args[1]
         local_path = args[2]
 
-        BulkDataSplitter.new.call(month: month, local_path: local_path, oc_source: oc_source)
+        BulkDataSplitter.new.call(month:, local_path:, oc_source:)
       end
 
+      # rubocop:disable Metrics/ParameterLists
       def initialize(
         s3_bucket: ENV.fetch('ATHENA_S3_BUCKET'),
         stream_uploader_service: nil,
@@ -38,19 +41,23 @@ module RegisterIngesterOc
         @alt_names_s3_prefix = alt_names_s3_prefix
         @add_ids_s3_prefix = add_ids_s3_prefix
       end
+      # rubocop:enable Metrics/ParameterLists
 
       def call(month:, local_path:, oc_source:)
         s3_prefix = select_s3_prefix(oc_source)
         dst_prefix = File.join(s3_prefix, "mth=#{month}")
 
         File.open(local_path, 'rb') do |stream|
-          stream_decompressor.with_deflated_stream(stream, compression: RegisterCommon::Decompressors::CompressionTypes::GZIP) do |deflated|
+          stream_decompressor.with_deflated_stream(
+            stream,
+            compression: RegisterCommon::Decompressors::CompressionTypes::GZIP
+          ) do |deflated|
             stream_uploader_service.upload_in_parts(
               deflated,
-              s3_bucket: s3_bucket,
+              s3_bucket:,
               s3_prefix: dst_prefix,
-              split_size: split_size,
-              max_lines: max_lines
+              split_size:,
+              max_lines:
             )
           end
         end
@@ -58,8 +65,8 @@ module RegisterIngesterOc
 
       private
 
-      attr_reader :s3_bucket, :s3_prefix, :stream_uploader_service, :split_size, :max_lines
-      attr_reader :companies_s3_prefix, :alt_names_s3_prefix, :add_ids_s3_prefix, :stream_decompressor
+      attr_reader :s3_bucket, :s3_prefix, :stream_uploader_service, :split_size, :max_lines, :companies_s3_prefix,
+                  :alt_names_s3_prefix, :add_ids_s3_prefix, :stream_decompressor
 
       def select_s3_prefix(oc_source)
         case oc_source

@@ -1,9 +1,12 @@
+# frozen_string_literal: true
+
 require 'register_ingester_oc/config/adapters'
 require 'register_ingester_oc/config/settings'
 
 module RegisterIngesterOc
   module Companies
     class ExporterService
+      # rubocop:disable Metrics/ParameterLists
       def initialize(
         athena_adapter: Config::Adapters::ATHENA_ADAPTER,
         athena_database: ENV.fetch('ATHENA_DATABASE'),
@@ -20,6 +23,7 @@ module RegisterIngesterOc
         @full_s3_prefix = full_s3_prefix
         @diffs_s3_prefix = diffs_s3_prefix
       end
+      # rubocop:enable Metrics/ParameterLists
 
       def call(month)
         calc_prev_month month
@@ -29,17 +33,17 @@ module RegisterIngesterOc
       end
 
       def s3_export_location_full(month)
-        File.join("s3://#{s3_bucket}", full_s3_prefix, "mth=#{month}") + '/'
+        "#{File.join("s3://#{s3_bucket}", full_s3_prefix, "mth=#{month}")}/"
       end
 
       def s3_export_location_diffs(month)
-        File.join("s3://#{s3_bucket}", diffs_s3_prefix, "mth=#{month}") + '/'
+        "#{File.join("s3://#{s3_bucket}", diffs_s3_prefix, "mth=#{month}")}/"
       end
 
       private
 
-      attr_reader :athena_adapter, :athena_database, :s3_bucket, :output_location
-      attr_reader :filtered_table_name, :full_s3_prefix, :diffs_s3_prefix
+      attr_reader :athena_adapter, :athena_database, :s3_bucket, :output_location, :filtered_table_name,
+                  :full_s3_prefix, :diffs_s3_prefix
 
       def export_all_json(month)
         dst_table_name = "oc_export_full_#{month}"
@@ -114,28 +118,28 @@ module RegisterIngesterOc
       end
 
       def execute_sql(sql_query)
-        athena_query = athena_adapter.start_query_execution({
-          query_string: sql_query,
-          result_configuration: {
-            output_location: output_location
+        athena_query = athena_adapter.start_query_execution(
+          {
+            query_string: sql_query,
+            result_configuration: {
+              output_location:
+            }
           }
-        })
+        )
         athena_adapter.wait_for_query(athena_query.query_execution_id)
       end
 
       def calc_prev_month(month)
         month_split = month.split('_', 2).map(&:to_i)
-        if month_split.length != 2
-          raise 'wrong month format'
-        end
-        
+        raise 'wrong month format' if month_split.length != 2
+
         year_i = month_split[0].to_i
         month_i = month_split[1].to_i
 
-        prev_year_i = (month_i == 1) ? (year_i-1) : year_i
-        prev_month_i = (month_i == 1) ? 12 : (month_i-1)
+        prev_year_i = month_i == 1 ? (year_i - 1) : year_i
+        prev_month_i = month_i == 1 ? 12 : (month_i - 1)
 
-        "%d_%02d" % [prev_year_i, prev_month_i]
+        format('%d_%02d', prev_year_i, prev_month_i) # rubocop:disable Style/FormatStringToken
       end
     end
   end

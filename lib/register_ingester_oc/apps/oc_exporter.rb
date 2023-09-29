@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'register_ingester_oc/exceptions'
 require 'register_ingester_oc/config/settings'
 require 'register_ingester_oc/add_ids/exporter_service'

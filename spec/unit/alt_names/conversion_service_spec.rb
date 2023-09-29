@@ -1,14 +1,16 @@
+# frozen_string_literal: true
+
 require 'register_ingester_oc/alt_names/conversion_service'
 
 RSpec.describe RegisterIngesterOc::AltNames::ConversionService do
   subject do
     described_class.new(
-      athena_adapter: athena_adapter,
-      athena_database: athena_database,
-      s3_bucket: s3_bucket,
-      raw_table_name: raw_table_name,
-      processed_table_name: processed_table_name,
-      filtered_table_name: filtered_table_name
+      athena_adapter:,
+      athena_database:,
+      s3_bucket:,
+      raw_table_name:,
+      processed_table_name:,
+      filtered_table_name:
     )
   end
 
@@ -21,28 +23,28 @@ RSpec.describe RegisterIngesterOc::AltNames::ConversionService do
 
   describe '#call' do
     let(:month) { '2022_05' }
-    let(:jurisdiction_codes) { ['gb', 'dk'] }
+    let(:jurisdiction_codes) { %w[gb dk] }
 
     it 'calls athena with correct queries' do
       # Repair table query
       expect(athena_adapter).to receive(:execute_and_wait).with(
         "MSCK REPAIR TABLE raw_table_name\n",
-        "s3://s3_bucket/athena_results"
+        's3://s3_bucket/athena_results'
       )
 
       # Convert table query
       expect(athena_adapter).to receive(:execute_and_wait).with(
         "INSERT INTO processed_table_name\nSELECT * FROM raw_table_name\nWHERE mth = '2022_05';\n",
-        "s3://s3_bucket/athena_results"
+        's3://s3_bucket/athena_results'
       )
 
       # Inserts into filtered table
       expect(athena_adapter).to receive(:execute_and_wait).with(
-        "INSERT INTO filtered_table_name\nSELECT\n  company_number,\n  name,\n  type,\n  start_date,\n  end_date,\n  mth,\n  jurisdiction_code\nFROM processed_table_name\nWHERE mth = '2022_05' AND jurisdiction_code IN ('gb', 'dk');\n",
-        "s3://s3_bucket/athena_results"
+        "INSERT INTO filtered_table_name\nSELECT\n  company_number,\n  name,\n  type,\n  start_date,\n  end_date,\n  mth,\n  jurisdiction_code\nFROM processed_table_name\nWHERE mth = '2022_05' AND jurisdiction_code IN ('gb', 'dk');\n", # rubocop:disable Layout/LineLength
+        's3://s3_bucket/athena_results'
       )
 
-      subject.call month, jurisdiction_codes: jurisdiction_codes
+      subject.call month, jurisdiction_codes:
     end
   end
 end

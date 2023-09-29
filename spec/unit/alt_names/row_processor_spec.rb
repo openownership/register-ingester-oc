@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'register_ingester_oc/alt_names/row_processor'
 
 RSpec.describe RegisterIngesterOc::AltNames::RowProcessor do

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'register_common/services/file_reader'
 
 require 'register_ingester_oc/config/settings'
@@ -7,6 +9,7 @@ require 'register_ingester_oc/config/elasticsearch'
 module RegisterIngesterOc
   module Services
     class EsIngestorService
+      # rubocop:disable Metrics/ParameterLists
       def initialize(
         row_processor:,
         repository:,
@@ -18,24 +21,25 @@ module RegisterIngesterOc
         @row_processor = row_processor
         @repository = repository
         @s3_adapter = s3_adapter
-        @file_reader = file_reader || RegisterCommon::Services::FileReader.new(s3_adapter: s3_adapter)
+        @file_reader = file_reader || RegisterCommon::Services::FileReader.new(s3_adapter:)
         @s3_bucket = s3_bucket
         @full_s3_prefix = full_s3_prefix
       end
+      # rubocop:enable Metrics/ParameterLists
 
       def call(month)
         s3_prefix = File.join(full_s3_prefix, "mth=#{month}")
 
         # Calculate s3 paths to import
-        s3_paths = s3_adapter.list_objects(s3_bucket: s3_bucket, s3_prefix: s3_prefix)
+        s3_paths = s3_adapter.list_objects(s3_bucket:, s3_prefix:)
         print "IMPORTING S3 Paths:\n#{s3_paths} AT #{Time.now}\n\n"
 
         # Ingest S3 files
         s3_paths.each do |s3_path|
           print "STARTED IMPORTING #{s3_path} AT #{Time.now}\n"
           file_reader.read_from_s3(
-            s3_bucket: s3_bucket,
-            s3_path: s3_path,
+            s3_bucket:,
+            s3_path:,
             file_format: RegisterCommon::Parsers::FileFormats::JSON,
             compression: RegisterCommon::Decompressors::CompressionTypes::GZIP
           ) do |records|

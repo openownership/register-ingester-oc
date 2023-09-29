@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'register_ingester_oc/add_ids/row_processor'
 
 RSpec.describe RegisterIngesterOc::AddIds::RowProcessor do

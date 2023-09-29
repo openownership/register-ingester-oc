@@ -1,9 +1,12 @@
+# frozen_string_literal: true
+
 require 'register_ingester_oc/config/adapters'
 require 'register_ingester_oc/config/settings'
 
 module RegisterIngesterOc
   module AddIds
     class CreateTablesService
+      # rubocop:disable Metrics/ParameterLists
       def initialize(
         athena_adapter: Config::Adapters::ATHENA_ADAPTER,
         athena_database: ENV.fetch('ATHENA_DATABASE'),
@@ -26,6 +29,7 @@ module RegisterIngesterOc
         @processed_s3_location = processed_s3_location
         @filtered_s3_location = filtered_s3_location
       end
+      # rubocop:enable Metrics/ParameterLists
 
       def call
         create_raw_data_table
@@ -35,19 +39,20 @@ module RegisterIngesterOc
 
       private
 
-      attr_reader :athena_adapter, :athena_database, :s3_bucket, :output_location
-      attr_reader :raw_table_name, :processed_table_name, :filtered_table_name
-      attr_reader :bulk_data_s3_location, :processed_s3_location, :filtered_s3_location
+      attr_reader :athena_adapter, :athena_database, :s3_bucket,
+                  :output_location, :raw_table_name, :processed_table_name,
+                  :filtered_table_name, :bulk_data_s3_location,
+                  :processed_s3_location, :filtered_s3_location
 
       def create_raw_data_table
         query = <<~SQL
           CREATE EXTERNAL TABLE IF NOT EXISTS #{raw_table_name} (
             #{schemas}
           )
-            PARTITIONED BY (`mth` STRING, `part` STRING)
-            ROW FORMAT SERDE 'org.apache.hadoop.hive.serde2.OpenCSVSerde'
-            WITH SERDEPROPERTIES ("escapeChar"= "¬")
-            LOCATION '#{bulk_data_s3_location}';
+          PARTITIONED BY (`mth` STRING, `part` STRING)
+          ROW FORMAT SERDE 'org.apache.hadoop.hive.serde2.OpenCSVSerde'
+          WITH SERDEPROPERTIES ("escapeChar"= "¬")
+          LOCATION '#{bulk_data_s3_location}';
         SQL
         execute_sql query
       end
@@ -58,15 +63,15 @@ module RegisterIngesterOc
             #{schemas}
           )
           PARTITIONED BY (`mth` STRING, `part` STRING)
-          ROW FORMAT SERDE 
-            'org.apache.hadoop.hive.ql.io.parquet.serde.ParquetHiveSerDe' 
-          STORED AS INPUTFORMAT 
-            'org.apache.hadoop.hive.ql.io.parquet.MapredParquetInputFormat' 
-          OUTPUTFORMAT 
+          ROW FORMAT SERDE
+            'org.apache.hadoop.hive.ql.io.parquet.serde.ParquetHiveSerDe'
+          STORED AS INPUTFORMAT
+            'org.apache.hadoop.hive.ql.io.parquet.MapredParquetInputFormat'
+          OUTPUTFORMAT
             'org.apache.hadoop.hive.ql.io.parquet.MapredParquetOutputFormat'
           LOCATION '#{processed_s3_location}'
           TBLPROPERTIES (
-            'has_encrypted_data'='false', 
+            'has_encrypted_data'='false',
             'parquet.compression'='GZIP');
         SQL
         execute_sql query
@@ -80,27 +85,29 @@ module RegisterIngesterOc
             identifier_system_code STRING
           )
           PARTITIONED BY (`mth` STRING, `jurisdiction_code` STRING)
-          ROW FORMAT SERDE 
-            'org.apache.hadoop.hive.ql.io.parquet.serde.ParquetHiveSerDe' 
-          STORED AS INPUTFORMAT 
-            'org.apache.hadoop.hive.ql.io.parquet.MapredParquetInputFormat' 
-          OUTPUTFORMAT 
+          ROW FORMAT SERDE
+            'org.apache.hadoop.hive.ql.io.parquet.serde.ParquetHiveSerDe'
+          STORED AS INPUTFORMAT
+            'org.apache.hadoop.hive.ql.io.parquet.MapredParquetInputFormat'
+          OUTPUTFORMAT
             'org.apache.hadoop.hive.ql.io.parquet.MapredParquetOutputFormat'
           LOCATION '#{filtered_s3_location}'
           TBLPROPERTIES (
-            'has_encrypted_data'='false', 
+            'has_encrypted_data'='false',
             'parquet.compression'='GZIP');
         SQL
         execute_sql query
       end
 
       def execute_sql(sql_query)
-        athena_query = athena_adapter.start_query_execution({
-          query_string: sql_query,
-          result_configuration: {
-            output_location: output_location
+        athena_query = athena_adapter.start_query_execution(
+          {
+            query_string: sql_query,
+            result_configuration: {
+              output_location:
+            }
           }
-        })
+        )
         athena_adapter.wait_for_query(athena_query.query_execution_id)
       end
 

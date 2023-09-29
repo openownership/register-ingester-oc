@@ -12,6 +12,7 @@ services:
     volumes:
       - ${DC_INGESTER_OC_LIB_REGISTER_COMMON:-.dockerempty}:/home/x/lib/register-common
       - ${DC_INGESTER_OC_LIB_REGISTER_SOURCES_OC:-.dockerempty}:/home/x/lib/register-sources-oc
+      - ./.rubocop.yml:/home/x/r/.rubocop.yml
       - ./bin:/home/x/r/bin
       - ./Gemfile.lock:/home/x/r/Gemfile.lock
       - ./Gemfile:/home/x/r/Gemfile
