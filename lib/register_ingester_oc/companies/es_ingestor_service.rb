@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'register_ingester_oc/services/es_ingestor_service'
 require 'register_sources_oc/repositories/company_repository'
 require 'register_ingester_oc/companies/row_processor'

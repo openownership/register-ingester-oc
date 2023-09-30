@@ -1,4 +1,4 @@
-#!/usr/bin/env ruby
+# frozen_string_literal: true
 
 require 'json'
 
@@ -24,13 +24,16 @@ module RegisterIngesterOc
         month = args[0]
         import_type = args[1]
 
-        EsChecker.new.call(month: month, import_type: import_type)
+        EsChecker.new.call(month:, import_type:)
       end
 
+      # rubocop:disable Metrics/ParameterLists
       def initialize(
         company_service: RegisterSourcesOc::Services::CompanyService.new(comparison_mode: true),
         file_reader: Companies::FileReader.new,
-        company_repository: RegisterSourcesOc::Repositories::CompanyRepository.new(client: Config::ELASTICSEARCH_CLIENT),
+        company_repository: RegisterSourcesOc::Repositories::CompanyRepository.new(
+          client: Config::ELASTICSEARCH_CLIENT
+        ),
         s3_adapter: Config::Adapters::S3_ADAPTER,
         s3_bucket: ENV.fetch('ATHENA_S3_BUCKET'),
         diffs_s3_prefix: ENV.fetch('COMPANIES_EXPORT_JSON_DIFFS_S3_PREFIX'),
@@ -44,6 +47,7 @@ module RegisterIngesterOc
         @diffs_s3_prefix = diffs_s3_prefix
         @full_s3_prefix = full_s3_prefix
       end
+      # rubocop:enable Metrics/ParameterLists
 
       def call(month:, import_type:)
         # Calculate s3 prefix
@@ -59,13 +63,13 @@ module RegisterIngesterOc
         s3_prefix = File.join(s3_prefix_base, "mth=#{month}")
 
         # Calculate s3 paths to import
-        s3_paths = s3_adapter.list_objects(s3_bucket: s3_bucket, s3_prefix: s3_prefix)
+        s3_paths = s3_adapter.list_objects(s3_bucket:, s3_prefix:)
         print "IMPORTING S3 Paths:\n#{s3_paths} AT #{Time.now}\n\n"
 
         # Ingest S3 files
         s3_paths.each do |s3_path|
           print "\nCHECKING #{s3_path}\n"
-          file_reader.import_from_s3(s3_bucket: s3_bucket, s3_path: s3_path, file_format: 'json') do |records|
+          file_reader.import_from_s3(s3_bucket:, s3_path:, file_format: 'json') do |records|
             records.each do |record|
               perform_checks(record)
             end
@@ -78,35 +82,36 @@ module RegisterIngesterOc
 
       private
 
-      attr_reader :file_reader, :company_repository, :company_service, :s3_adapter, :s3_bucket, :diffs_s3_prefix, :full_s3_prefix
+      attr_reader :file_reader, :company_repository, :company_service, :s3_adapter, :s3_bucket, :diffs_s3_prefix,
+                  :full_s3_prefix
 
       def perform_checks(record)
         jurisdiction_code = record.jurisdiction_code
         company_number = record.company_number
-        name = record.name
+        record.name
 
-        #print "CHECK GET COMPANY\n"
+        # print "CHECK GET COMPANY\n"
         results = company_service.get_company(jurisdiction_code, company_number)
-        if !results.empty?
+        unless results.empty?
           results.each do |result|
-            print "get_company jurisdiction_code:#{jurisdiction_code} company_number:#{company_number} result:#{JSON.pretty_generate(result)}\n"
+            print "get_company jurisdiction_code:#{jurisdiction_code} company_number:#{company_number} result:#{JSON.pretty_generate(result)}\n" # rubocop:disable Layout/LineLength
           end
         end
 
-        #print "CHECK SEARCH COMPANY\n"
+        # print "CHECK SEARCH COMPANY\n"
         results = company_service.search_companies(jurisdiction_code, company_number)
-        if !results.empty?
-          results.each do |result|
-            print "search_companies jurisdiction_code:#{jurisdiction_code} company_number:#{company_number} result:#{JSON.pretty_generate(result)}\n"
-          end
+        return if results.empty?
+
+        results.each do |result|
+          print "search_companies jurisdiction_code:#{jurisdiction_code} company_number:#{company_number} result:#{JSON.pretty_generate(result)}\n" # rubocop:disable Layout/LineLength
         end
 
-        #results = company_service.search_companies_by_name(name)
-        #if !results.empty?
+        # results = company_service.search_companies_by_name(name)
+        # if !results.empty?
         #  results.each do |result|
         #    print "search_companies_by_name name:#{name} result:#{JSON.pretty_generate(result)}\n"
         #  end
-        #end
+        # end
       end
     end
   end

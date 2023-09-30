@@ -1,4 +1,4 @@
-#!/usr/bin/env ruby
+# frozen_string_literal: true
 
 require 'register_ingester_oc/exceptions'
 require 'register_ingester_oc/add_ids/es_ingestor_service'
@@ -12,7 +12,7 @@ module RegisterIngesterOc
         oc_source = args[0]
         month = args[1]
 
-        new().call(oc_source, month)
+        new.call(oc_source, month)
       end
 
       def initialize(

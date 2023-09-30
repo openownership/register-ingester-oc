@@ -1,0 +1,132 @@
+require:
+  - rubocop-rspec
+inherit_mode:
+  merge:
+    - Exclude
+AllCops:
+  NewCops: enable
+Metrics/AbcSize:
+  Enabled: false
+Metrics/ClassLength:
+  Enabled: false
+Metrics/MethodLength:
+  Enabled: false
+Style/Documentation:
+  Enabled: false
+#-------------------------------------------------------------------------------
+RSpec/ExampleLength:
+  Exclude:
+    - spec/unit/add_ids/conversion_service_spec.rb
+    - spec/unit/add_ids/create_tables_service_spec.rb
+    - spec/unit/alt_names/conversion_service_spec.rb
+    - spec/unit/alt_names/create_tables_service_spec.rb
+    - spec/unit/apps/bulk_data_splitter_spec.rb
+    - spec/unit/apps/oc_downloader_spec.rb
+    - spec/unit/companies/conversion_service_spec.rb
+    - spec/unit/companies/create_tables_service_spec.rb
+    - spec/unit/services/download_service_spec.rb
+    - spec/unit/services/es_ingestor_service_spec.rb
+RSpec/FilePath:
+  Exclude:
+    - spec/unit/add_ids/conversion_service_spec.rb
+    - spec/unit/add_ids/create_tables_service_spec.rb
+    - spec/unit/add_ids/row_processor_spec.rb
+    - spec/unit/alt_names/conversion_service_spec.rb
+    - spec/unit/alt_names/create_tables_service_spec.rb
+    - spec/unit/alt_names/row_processor_spec.rb
+    - spec/unit/apps/bulk_data_splitter_spec.rb
+    - spec/unit/apps/es_ingestor_spec.rb
+    - spec/unit/apps/oc_converter_spec.rb
+    - spec/unit/apps/oc_downloader_spec.rb
+    - spec/unit/apps/oc_exporter_spec.rb
+    - spec/unit/apps/table_creator_spec.rb
+    - spec/unit/companies/conversion_service_spec.rb
+    - spec/unit/companies/create_tables_service_spec.rb
+    - spec/unit/companies/row_processor_spec.rb
+    - spec/unit/register_ingester_oc.rb
+    - spec/unit/services/download_service_spec.rb
+    - spec/unit/services/es_ingestor_service_spec.rb
+RSpec/MessageSpies:
+  Exclude:
+    - spec/unit/add_ids/conversion_service_spec.rb
+    - spec/unit/add_ids/create_tables_service_spec.rb
+    - spec/unit/alt_names/conversion_service_spec.rb
+    - spec/unit/alt_names/create_tables_service_spec.rb
+    - spec/unit/apps/bulk_data_splitter_spec.rb
+    - spec/unit/apps/es_ingestor_spec.rb
+    - spec/unit/apps/oc_converter_spec.rb
+    - spec/unit/apps/oc_downloader_spec.rb
+    - spec/unit/apps/oc_exporter_spec.rb
+    - spec/unit/apps/table_creator_spec.rb
+    - spec/unit/companies/conversion_service_spec.rb
+    - spec/unit/companies/create_tables_service_spec.rb
+    - spec/unit/services/es_ingestor_service_spec.rb
+RSpec/MultipleExpectations:
+  Exclude:
+    - spec/unit/add_ids/conversion_service_spec.rb
+    - spec/unit/add_ids/create_tables_service_spec.rb
+    - spec/unit/alt_names/conversion_service_spec.rb
+    - spec/unit/alt_names/create_tables_service_spec.rb
+    - spec/unit/companies/conversion_service_spec.rb
+    - spec/unit/companies/create_tables_service_spec.rb
+    - spec/unit/services/es_ingestor_service_spec.rb
+RSpec/MultipleMemoizedHelpers:
+  Exclude:
+    - spec/unit/add_ids/conversion_service_spec.rb
+    - spec/unit/add_ids/create_tables_service_spec.rb
+    - spec/unit/alt_names/conversion_service_spec.rb
+    - spec/unit/alt_names/create_tables_service_spec.rb
+    - spec/unit/apps/bulk_data_splitter_spec.rb
+    - spec/unit/apps/es_ingestor_spec.rb
+    - spec/unit/apps/oc_converter_spec.rb
+    - spec/unit/apps/oc_exporter_spec.rb
+    - spec/unit/companies/conversion_service_spec.rb
+    - spec/unit/companies/create_tables_service_spec.rb
+    - spec/unit/services/es_ingestor_service_spec.rb
+RSpec/NamedSubject:
+  Exclude:
+    - spec/unit/add_ids/conversion_service_spec.rb
+    - spec/unit/add_ids/create_tables_service_spec.rb
+    - spec/unit/add_ids/row_processor_spec.rb
+    - spec/unit/alt_names/conversion_service_spec.rb
+    - spec/unit/alt_names/create_tables_service_spec.rb
+    - spec/unit/alt_names/row_processor_spec.rb
+    - spec/unit/apps/bulk_data_splitter_spec.rb
+    - spec/unit/apps/es_ingestor_spec.rb
+    - spec/unit/apps/oc_converter_spec.rb
+    - spec/unit/apps/oc_downloader_spec.rb
+    - spec/unit/apps/oc_exporter_spec.rb
+    - spec/unit/apps/table_creator_spec.rb
+    - spec/unit/companies/conversion_service_spec.rb
+    - spec/unit/companies/create_tables_service_spec.rb
+    - spec/unit/companies/row_processor_spec.rb
+    - spec/unit/services/download_service_spec.rb
+    - spec/unit/services/es_ingestor_service_spec.rb
+RSpec/StubbedMock:
+  Exclude:
+    - spec/unit/add_ids/create_tables_service_spec.rb
+    - spec/unit/alt_names/create_tables_service_spec.rb
+    - spec/unit/apps/bulk_data_splitter_spec.rb
+    - spec/unit/apps/es_ingestor_spec.rb
+    - spec/unit/apps/oc_converter_spec.rb
+    - spec/unit/apps/oc_downloader_spec.rb
+    - spec/unit/apps/oc_exporter_spec.rb
+    - spec/unit/apps/table_creator_spec.rb
+    - spec/unit/companies/create_tables_service_spec.rb
+    - spec/unit/services/es_ingestor_service_spec.rb
+RSpec/VerifiedDoubles:
+  Exclude:
+    - spec/unit/add_ids/conversion_service_spec.rb
+    - spec/unit/add_ids/create_tables_service_spec.rb
+    - spec/unit/alt_names/conversion_service_spec.rb
+    - spec/unit/alt_names/create_tables_service_spec.rb
+    - spec/unit/apps/bulk_data_splitter_spec.rb
+    - spec/unit/apps/es_ingestor_spec.rb
+    - spec/unit/apps/oc_converter_spec.rb
+    - spec/unit/apps/oc_downloader_spec.rb
+    - spec/unit/apps/oc_exporter_spec.rb
+    - spec/unit/apps/table_creator_spec.rb
+    - spec/unit/companies/conversion_service_spec.rb
+    - spec/unit/companies/create_tables_service_spec.rb
+    - spec/unit/services/download_service_spec.rb
+    - spec/unit/services/es_ingestor_service_spec.rb

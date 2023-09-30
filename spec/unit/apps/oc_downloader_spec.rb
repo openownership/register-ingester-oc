@@ -1,8 +1,10 @@
+# frozen_string_literal: true
+
 require 'register_ingester_oc/apps/oc_downloader'
 
 RSpec.describe RegisterIngesterOc::Apps::OcDownloader do
   subject do
-    described_class.new(download_service: download_service)
+    described_class.new(download_service:)
   end
 
   let(:download_service) { double 'download_service' }
@@ -62,11 +64,11 @@ RSpec.describe RegisterIngesterOc::Apps::OcDownloader do
       let(:oc_source) { 'unknown_source' }
 
       it 'raises an error' do
-        expect {
+        expect do
           subject.call(oc_source, month, dst_path)
-        }.to raise_error RegisterIngesterOc::UnknownOcSourceError
+        end.to raise_error RegisterIngesterOc::UnknownOcSourceError
       end
-    end    
+    end
   end
 
   describe '#bash_call' do
@@ -74,10 +76,12 @@ RSpec.describe RegisterIngesterOc::Apps::OcDownloader do
 
     let(:app) { double 'app' }
 
+    # rubocop:disable RSpec/ExpectInHook
     before do
       expect(described_class).to receive(:new).and_return app
       allow(app).to receive(:call)
     end
+    # rubocop:enable RSpec/ExpectInHook
 
     it 'calls app with correct params' do
       oc_source = 'companies'

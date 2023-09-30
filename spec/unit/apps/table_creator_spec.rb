@@ -1,11 +1,13 @@
+# frozen_string_literal: true
+
 require 'register_ingester_oc/apps/table_creator'
 
 RSpec.describe RegisterIngesterOc::Apps::TableCreator do
   subject do
     described_class.new(
-      companies_table_service: companies_table_service,
-      alt_names_table_service: alt_names_table_service,
-      add_ids_table_service: add_ids_table_service
+      companies_table_service:,
+      alt_names_table_service:,
+      add_ids_table_service:
     )
   end
 
@@ -56,11 +58,11 @@ RSpec.describe RegisterIngesterOc::Apps::TableCreator do
       let(:oc_source) { 'unknown_source' }
 
       it 'raises an error' do
-        expect {
+        expect do
           subject.call(oc_source)
-        }.to raise_error RegisterIngesterOc::UnknownOcSourceError
+        end.to raise_error RegisterIngesterOc::UnknownOcSourceError
       end
-    end    
+    end
   end
 
   describe '#bash_call' do
@@ -68,10 +70,12 @@ RSpec.describe RegisterIngesterOc::Apps::TableCreator do
 
     let(:app) { double 'app' }
 
+    # rubocop:disable RSpec/ExpectInHook
     before do
       expect(described_class).to receive(:new).and_return app
       allow(app).to receive(:call)
     end
+    # rubocop:enable RSpec/ExpectInHook
 
     it 'calls app with correct params' do
       oc_source = 'companies'

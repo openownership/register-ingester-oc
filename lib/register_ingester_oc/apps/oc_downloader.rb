@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'register_ingester_oc/exceptions'
 require 'register_ingester_oc/config/settings'
 require 'register_ingester_oc/services/download_service'
@@ -10,7 +12,7 @@ module RegisterIngesterOc
         month = args[1]
         dst_path = args[2]
 
-        OcDownloader.new.call oc_source, month, dst_path 
+        OcDownloader.new.call oc_source, month, dst_path
       end
 
       def initialize(download_service: Services::DownloadService.new)
@@ -22,7 +24,7 @@ module RegisterIngesterOc
 
         print "DOWNLOADING #{filename} #{Time.now} to #{dst_path}\n"
 
-        download_service.download(month, dst_path, filename: filename)
+        download_service.download(month, dst_path, filename:)
 
         print "DOWNLOADED #{filename} #{Time.now} to #{dst_path}\n"
       end

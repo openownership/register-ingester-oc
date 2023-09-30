@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative 'settings'
 require 'register_sources_oc/config/elasticsearch'
 

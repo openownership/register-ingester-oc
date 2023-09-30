@@ -1,10 +1,12 @@
+# frozen_string_literal: true
+
 require 'register_sources_oc/structs/alt_name'
 
 module RegisterIngesterOc
   module AltNames
     class RowProcessor
       def process_row(row)
-        row = row.transform_values { |v| (v == '') ? nil : v }
+        row = row.transform_values { |v| v == '' ? nil : v }
         row = row.transform_keys(&:to_sym)
 
         RegisterSourcesOc::AltName.new(

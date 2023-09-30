@@ -1,23 +1,15 @@
-require 'dotenv'
-
-if ENV['TEST'].to_i == 1
-  Dotenv.load('.test.env')
-else
-  Dotenv.load('.env')
-end
+# frozen_string_literal: true
 
 module RegisterIngesterOc
   module Config
     SettingsStruct = Struct.new(
       :OC_HOST,
-      :OC_USERNAME,
-      :OC_PASSWORD
+      :OC_USERNAME
     )
 
     SETTINGS = SettingsStruct.new(
       ENV.fetch('OPENCORPORATES_SFTP_HOST'),
-      ENV.fetch('OPENCORPORATES_SFTP_USER'),
-      ENV.fetch('OPENCORPORATES_SFTP_PASSWORD')
+      ENV.fetch('OPENCORPORATES_SFTP_USER')
     )
 
     AwsCredentialsStruct = Struct.new(
