@@ -22,7 +22,7 @@ docker compose run ingester-oc es_index_creator
 
 Find the directory relating to the data to download, e.g. `2022-09-01`. This is then used in subsequent commands.
 
-You will be prompted for your SFTP password for the OpenCorporates download (regardless of `OPENCORPORATES_SFTP_PASSWORD`).
+You will be prompted for your SFTP password for the OpenCorporates download.
 
 ### Companies
 

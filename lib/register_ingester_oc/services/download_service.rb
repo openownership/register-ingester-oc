@@ -19,7 +19,6 @@ module RegisterIngesterOc
         sftp_adapter.download_file(
           host: settings.OC_HOST,
           username: settings.OC_USERNAME,
-          password: settings.OC_PASSWORD,
           rem_path:,
           dst_path:
         )
