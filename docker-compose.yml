@@ -17,7 +17,6 @@ services:
       - ./Gemfile.lock:/home/x/r/Gemfile.lock
       - ./Gemfile:/home/x/r/Gemfile
       - ./lib:/home/x/r/lib
-      - ./manual_tests:/home/x/r/manual_tests
       - ./register_ingester_oc.gemspec:/home/x/r/register_ingester_oc.gemspec
       - ./spec:/home/x/r/spec
       - ./storage:/home/x/r/storage

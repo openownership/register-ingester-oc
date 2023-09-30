@@ -1,6 +1,8 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
+require 'bundler/setup'
+
 require 'register_ingester_oc/apps/es_checker'
 
 RegisterIngesterOc::Apps::EsChecker.bash_call ARGV

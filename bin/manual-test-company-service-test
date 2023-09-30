@@ -1,6 +1,8 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
+require 'bundler/setup'
+
 require 'register_ingester_oc/config/elasticsearch'
 
 require 'register_sources_oc/repositories/company_repository'
