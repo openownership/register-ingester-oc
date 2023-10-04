@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
-require 'register_ingester_oc/exceptions'
-require 'register_ingester_oc/config/settings'
-require 'register_ingester_oc/add_ids/create_tables_service'
-require 'register_ingester_oc/alt_names/create_tables_service'
-require 'register_ingester_oc/companies/create_tables_service'
+require_relative '../add_ids/create_tables_service'
+require_relative '../alt_names/create_tables_service'
+require_relative '../companies/create_tables_service'
+require_relative '../config/settings'
+require_relative '../exceptions'
 
 module RegisterIngesterOc
   module Apps

@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'register_common/structs/aws_credentials'
+
 module RegisterIngesterOc
   module Config
     SettingsStruct = Struct.new(
@@ -12,13 +14,7 @@ module RegisterIngesterOc
       ENV.fetch('OPENCORPORATES_SFTP_USER')
     )
 
-    AwsCredentialsStruct = Struct.new(
-      :AWS_REGION,
-      :AWS_ACCESS_KEY_ID,
-      :AWS_SECRET_ACCESS_KEY
-    )
-
-    AWS_CREDENTIALS = AwsCredentialsStruct.new(
+    AWS_CREDENTIALS = RegisterCommon::AwsCredentials.new(
       ENV.fetch('BODS_AWS_REGION'),
       ENV.fetch('BODS_AWS_ACCESS_KEY_ID'),
       ENV.fetch('BODS_AWS_SECRET_ACCESS_KEY')

@@ -2,9 +2,9 @@
 
 require 'register_common/services/file_reader'
 
-require 'register_ingester_oc/config/settings'
-require 'register_ingester_oc/config/adapters'
-require 'register_ingester_oc/config/elasticsearch'
+require_relative '../config/adapters'
+require_relative '../config/elasticsearch'
+require_relative '../config/settings'
 
 module RegisterIngesterOc
   module Services

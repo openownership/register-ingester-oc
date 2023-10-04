@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-require 'register_ingester_oc/exceptions'
-require 'register_ingester_oc/config/settings'
-require 'register_ingester_oc/services/download_service'
+require_relative '../config/settings'
+require_relative '../exceptions'
+require_relative '../services/download_service'
 
 module RegisterIngesterOc
   module Apps

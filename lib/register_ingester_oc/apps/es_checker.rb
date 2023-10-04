@@ -1,14 +1,13 @@
 # frozen_string_literal: true
 
 require 'json'
-
-require 'register_ingester_oc/config/settings'
 require 'register_sources_oc/repositories/company_repository'
 require 'register_sources_oc/services/company_service'
 
-require 'register_ingester_oc/config/adapters'
-require 'register_ingester_oc/config/elasticsearch'
-require 'register_ingester_oc/companies/file_reader'
+require_relative '../companies/file_reader'
+require_relative '../config/adapters'
+require_relative '../config/elasticsearch'
+require_relative '../config/settings'
 
 module RegisterIngesterOc
   module Apps
@@ -90,7 +89,6 @@ module RegisterIngesterOc
         company_number = record.company_number
         record.name
 
-        # print "CHECK GET COMPANY\n"
         results = company_service.get_company(jurisdiction_code, company_number)
         unless results.empty?
           results.each do |result|
@@ -98,20 +96,12 @@ module RegisterIngesterOc
           end
         end
 
-        # print "CHECK SEARCH COMPANY\n"
         results = company_service.search_companies(jurisdiction_code, company_number)
         return if results.empty?
 
         results.each do |result|
           print "search_companies jurisdiction_code:#{jurisdiction_code} company_number:#{company_number} result:#{JSON.pretty_generate(result)}\n" # rubocop:disable Layout/LineLength
         end
-
-        # results = company_service.search_companies_by_name(name)
-        # if !results.empty?
-        #  results.each do |result|
-        #    print "search_companies_by_name name:#{name} result:#{JSON.pretty_generate(result)}\n"
-        #  end
-        # end
       end
     end
   end

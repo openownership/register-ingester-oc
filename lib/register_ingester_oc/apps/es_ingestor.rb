@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-require 'register_ingester_oc/exceptions'
-require 'register_ingester_oc/add_ids/es_ingestor_service'
-require 'register_ingester_oc/alt_names/es_ingestor_service'
-require 'register_ingester_oc/companies/es_ingestor_service'
+require_relative '../add_ids/es_ingestor_service'
+require_relative '../alt_names/es_ingestor_service'
+require_relative '../companies/es_ingestor_service'
+require_relative '../exceptions'
 
 module RegisterIngesterOc
   module Apps
