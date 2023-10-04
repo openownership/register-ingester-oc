@@ -1,8 +1,9 @@
 # frozen_string_literal: true
 
-require 'register_ingester_oc/services/es_ingestor_service'
 require 'register_sources_oc/repositories/add_id_repository'
-require 'register_ingester_oc/add_ids/row_processor'
+
+require_relative '../services/es_ingestor_service'
+require_relative 'row_processor'
 
 module RegisterIngesterOc
   module AddIds

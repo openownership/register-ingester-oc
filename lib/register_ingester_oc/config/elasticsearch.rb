@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 
-require_relative 'settings'
 require 'register_sources_oc/config/elasticsearch'
+
+require_relative 'settings'
 
 module RegisterIngesterOc
   module Config

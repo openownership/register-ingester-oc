@@ -1,15 +1,16 @@
 # frozen_string_literal: true
 
-require 'register_common/services/stream_uploader_service'
 require 'register_common/decompressors/decompressor'
-require 'register_ingester_oc/exceptions'
-require 'register_ingester_oc/config/adapters'
+require 'register_common/services/stream_uploader_service'
+
+require_relative '../config/adapters'
+require_relative '../exceptions'
 
 module RegisterIngesterOc
   module Apps
     class BulkDataSplitter
+      DEFAULT_MAX_LINES  = nil
       DEFAULT_SPLIT_SIZE = 2_000_000
-      DEFAULT_MAX_LINES = nil
 
       def self.bash_call(args)
         oc_source = args[0]

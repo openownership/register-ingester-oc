@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-require 'register_ingester_oc/config/adapters'
-require 'register_ingester_oc/config/settings'
+require_relative '../config/adapters'
+require_relative '../config/settings'
 
 module RegisterIngesterOc
   module Services
