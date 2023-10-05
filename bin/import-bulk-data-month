@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+set -Eeuo pipefail
+
+src_date=$1 # e.g. 2023-10-01
+src_type=$2 # e.g. companies
+
+src_month="${src_date%-*}"
+src_month2="${src_month//-/_}"
+
+echo -e "\n=== Downloading from OpenCorporates"
+bin/download-from-oc "$src_type" "/oc-sftp-prod/open_ownership/$src_date" "storage/oc_file_$src_type"
+
+echo -e "\n=== Uploading split bulk data"
+bin/upload-split-bulk-data "$src_type" "$src_month2" "storage/oc_file_$src_type"
+
+echo -e "\n=== Converting OpenCorporates data"
+bin/convert-oc-data "$src_type" "$src_month2"
+
+echo -e "\n=== Exporting OpenCorporates data"
+bin/export-oc-data "$src_type" "$src_month2"
+
+echo -e "\n=== Ingesting into Elasticsearch"
+bin/ingest-into-es "$src_type" "$src_month2"
