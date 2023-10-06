@@ -26,6 +26,14 @@ docker compose run ingester-oc create-tables alt_names
 docker compose run ingester-oc create-tables companies
 ```
 
+## Testing
+
+Run the tests:
+
+```sh
+docker compose run ingester-oc test
+```
+
 ## Usage
 
 Find the directory relating to the data to download, e.g. `2023-10-01`. This is then used in subsequent commands.
@@ -36,14 +44,17 @@ Decide on which type of bulk data file to be ingested, e.g. `companies`. The opt
 - `alt_names`
 - `companies`
 
-There are now two options: you can run the commands step-by-step, or alternatively use the helper script.
+There are now two options:
+
+- ingest by using the helper script
+- ingest by running the commands step-by-step
 
 ### Helper script
 
 Import the bulk data for a month:
 
 ```sh
-docker compose run ingester-oc import-bulk-data-month 2023-10-01 companies
+docker compose run ingester-oc import-bulk-data 2023-10-01 companies
 ```
 
 ### Step-by-step
