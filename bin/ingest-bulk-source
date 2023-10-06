@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+set -Eeuo pipefail
+
+date=$1 # e.g. 2023-10-01
+source=$2 # e.g. companies
+
+import_id=$(date +%Y_%m -d "$date")
+
+echo -e "\n=== [$import_id/$source] Downloading from OpenCorporates"
+bin/download-from-oc "$source" "/oc-sftp-prod/open_ownership/$date" "storage/oc_file_$source"
+
+echo -e "\n=== [$import_id/$source] Uploading split bulk data"
+bin/upload-split-bulk-data "$source" "$import_id" "storage/oc_file_$source"
+
+echo -e "\n=== [$import_id/$source] Converting OpenCorporates data"
+bin/convert-oc-data "$source" "$import_id"
+
+echo -e "\n=== [$import_id/$source] Exporting OpenCorporates data"
+bin/export-oc-data "$source" "$import_id"
+
+echo -e "\n=== [$import_id/$source] Ingesting into Elasticsearch"
+bin/ingest-into-es "$source" "$import_id"
