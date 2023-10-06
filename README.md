@@ -38,7 +38,7 @@ docker compose run ingester-oc test
 
 Find the directory relating to the data to download, e.g. `2023-10-01`. This is then used in subsequent commands.
 
-Decide on which type of bulk data file to be ingested, e.g. `companies`. The options are:
+Decide on which bulk data file source to be ingested, e.g. `companies`. The options are:
 
 - `add_ids`
 - `alt_names`
@@ -51,10 +51,10 @@ There are now two options:
 
 ### Helper script
 
-Import the bulk data for a month:
+To ingest the bulk data (published monthly):
 
 ```sh
-docker compose run ingester-oc import-bulk-data 2023-10-01 companies
+docker compose run ingester-oc ingest-bulk 2023-10-01
 ```
 
 ### Step-by-step
