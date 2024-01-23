@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/openownership/register-common.git
-  revision: f7c4893e38067e5bc2b9878417f7adac440687f4
+  revision: fc24c1ddac24515bb33429d7c8d7980d594891a0
   specs:
     register_common (0.1.0)
       activesupport (>= 6, < 8)
@@ -19,7 +19,7 @@ GIT
 
 GIT
   remote: https://github.com/openownership/register-sources-oc.git
-  revision: 8b7220073a415f6869abe1423ed51110d82f28ca
+  revision: 5122dae625b36ad1813f8db539dcd44bd4424c87
   specs:
     register_sources_oc (0.1.0)
       activesupport (>= 6, < 8)
@@ -228,6 +228,9 @@ DEPENDENCIES
   rubocop
   rubocop-rspec
   webmock
+
+RUBY VERSION
+   ruby 3.1.2p20
 
 BUNDLED WITH
    2.3.15
