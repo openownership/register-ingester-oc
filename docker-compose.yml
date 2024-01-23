@@ -1,25 +1,48 @@
-version: "3.8"
+networks:
+  elasticsearch: {}
+  ingester: {}
 services:
+  elasticsearch:
+    environment:
+      ES_JAVA_OPTS: -Xms512m -Xmx512m
+      discovery.type: single-node
+      xpack.security.enabled: "false"
+    healthcheck:
+      interval: 5s
+      retries: 6
+      start_period: 60s
+      test:
+        - CMD
+        - curl
+        - -fs
+        - http://localhost:9200/_cluster/health
+    image: docker.io/library/elasticsearch:8.12.0
+    networks:
+      - elasticsearch
+    volumes:
+      - elasticsearch:/usr/share/elasticsearch/data
   ingester-oc:
     build:
       context: .
       target: dev
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
     env_file: .env
     networks:
       - elasticsearch
       - ingester
-    restart: on-failure
     volumes:
       - ${DC_INGESTER_OC_LIB_REGISTER_COMMON:-.dockerempty}:/home/x/lib/register-common
       - ${DC_INGESTER_OC_LIB_REGISTER_SOURCES_OC:-.dockerempty}:/home/x/lib/register-sources-oc
       - ./.rubocop.yml:/home/x/r/.rubocop.yml
-      - ./bin:/home/x/r/bin
       - ./Gemfile.lock:/home/x/r/Gemfile.lock
       - ./Gemfile:/home/x/r/Gemfile
+      - ./bin:/home/x/r/bin
       - ./lib:/home/x/r/lib
       - ./register_ingester_oc.gemspec:/home/x/r/register_ingester_oc.gemspec
       - ./spec:/home/x/r/spec
       - ./storage:/home/x/r/storage
-networks:
+version: "3.8"
+volumes:
   elasticsearch: {}
-  ingester: {}

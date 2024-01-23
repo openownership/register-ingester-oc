@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-raise 'not test env!' unless ENV['TEST'].to_i == 1
-
 require 'register_ingester_oc'
 require 'webmock/rspec'
 
