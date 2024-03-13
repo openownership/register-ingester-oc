@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require 'json'
-require 'register_sources_oc/repositories/company_repository'
+require 'register_sources_oc/repository'
 require 'register_sources_oc/services/company_service'
 
 require_relative '../companies/file_reader'
@@ -30,8 +30,11 @@ module RegisterIngesterOc
       def initialize(
         company_service: RegisterSourcesOc::Services::CompanyService.new(comparison_mode: true),
         file_reader: Companies::FileReader.new,
-        company_repository: RegisterSourcesOc::Repositories::CompanyRepository.new(
-          client: Config::ELASTICSEARCH_CLIENT
+        company_repository: RegisterSourcesOc::Repository.new(
+          RegisterSourcesOc::Company,
+          id_digest: false,
+          client: Config::ELASTICSEARCH_CLIENT,
+          index: RegisterSourcesOc::Config::ELASTICSEARCH_INDEX_COMPANIES
         ),
         s3_adapter: Config::Adapters::S3_ADAPTER,
         s3_bucket: ENV.fetch('ATHENA_S3_BUCKET'),

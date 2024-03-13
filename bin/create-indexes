@@ -8,6 +8,6 @@ require 'register_sources_oc/services/es_index_creator'
 
 index_creator = RegisterSourcesOc::Services::EsIndexCreator.new
 
-index_creator.create_companies_index
-index_creator.create_add_ids_index
-index_creator.create_alt_names_index
+index_creator.create_add_ids_index(RegisterSourcesOc::Config::ELASTICSEARCH_INDEX_ADD_IDS)
+index_creator.create_alt_names_index(RegisterSourcesOc::Config::ELASTICSEARCH_INDEX_ALT_NAMES)
+index_creator.create_companies_index(RegisterSourcesOc::Config::ELASTICSEARCH_INDEX_COMPANIES)

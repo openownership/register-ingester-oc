@@ -3,24 +3,28 @@
 
 require 'bundler/setup'
 
-require 'register_ingester_oc/config/settings'
 require 'register_ingester_oc/config/adapters'
 require 'register_ingester_oc/config/elasticsearch'
+require 'register_ingester_oc/config/settings'
+require 'register_sources_oc/repository'
 
-require 'register_sources_oc/repositories/alt_name_repository'
-require 'register_sources_oc/repositories/add_id_repository'
-require 'register_sources_oc/repositories/company_repository'
-
-alt_name_repository = RegisterSourcesOc::Repositories::AltNameRepository.new(
-  client: RegisterIngesterOc::Config::ELASTICSEARCH_CLIENT
+alt_name_repository = RegisterSourcesOc::Repository.new(
+  RegisterIngesterOc::AltName,
+  client: RegisterIngesterOc::Config::ELASTICSEARCH_CLIENT,
+  index: RegisterIngesterOc::Config::ELASTICSEARCH_INDEX_ALT_NAMES
 )
 
-RegisterSourcesOc::Repositories::AddIdRepository.new(
-  client: RegisterIngesterOc::Config::ELASTICSEARCH_CLIENT
+RegisterSourcesOc::Repository.new(
+  RegisterIngesterOc::AddId,
+  client: RegisterIngesterOc::Config::ELASTICSEARCH_CLIENT,
+  index: RegisterIngesterOc::Config::ELASTICSEARCH_INDEX_ADD_IDS
 )
 
-company_repository = RegisterSourcesOc::Repositories::AddIdRepository.new(
-  client: RegisterIngesterOc::Config::ELASTICSEARCH_CLIENT
+company_repository = RegisterSourcesOc::Repository.new(
+  RegisterIngesterOc::Company,
+  id_digest: false,
+  client: RegisterIngesterOc::Config::ELASTICSEARCH_CLIENT,
+  index: RegisterIngesterOc::Config::ELASTICSEARCH_INDEX_COMPANIES
 )
 
 print 'ALT NAME: ', alt_name_repository.search_by_number(
