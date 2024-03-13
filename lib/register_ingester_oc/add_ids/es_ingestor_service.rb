@@ -13,7 +13,7 @@ module RegisterIngesterOc
         repository: RegisterSourcesOc::Repository.new(
           RegisterSourcesOc::AddId,
           client: Config::ELASTICSEARCH_CLIENT,
-          index: Config::ELASTICSEARCH_INDEX_ADD_IDS
+          index: RegisterSourcesOc::Config::ELASTICSEARCH_INDEX_ADD_IDS
         ),
         s3_adapter: Config::Adapters::S3_ADAPTER,
         s3_bucket: ENV.fetch('ATHENA_S3_BUCKET'),

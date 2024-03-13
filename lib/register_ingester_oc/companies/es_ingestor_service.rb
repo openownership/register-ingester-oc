@@ -14,7 +14,7 @@ module RegisterIngesterOc
           RegisterSourcesOc::Company,
           id_digest: false,
           client: Config::ELASTICSEARCH_CLIENT,
-          index: Config::ELASTICSEARCH_INDEX_COMPANIES
+          index: RegisterSourcesOc::Config::ELASTICSEARCH_INDEX_COMPANIES
         ),
         s3_adapter: Config::Adapters::S3_ADAPTER,
         s3_bucket: ENV.fetch('ATHENA_S3_BUCKET'),
