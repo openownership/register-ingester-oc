@@ -4,25 +4,29 @@
 require 'bundler/setup'
 
 require 'register_ingester_oc/config/elasticsearch'
+require 'register_sources_oc/clients/open_corporate_client'
+require 'register_sources_oc/repository'
+require 'register_sources_oc/services/bulk_data_company_service'
+require 'register_sources_oc/services/company_service'
+require 'register_sources_oc/services/oc_api_company_service'
 
-require 'register_sources_oc/repositories/company_repository'
-company_repository = RegisterSourcesOc::Repositories::CompanyRepository.new(
-  client: RegisterIngesterOc::Config::ELASTICSEARCH_CLIENT
+company_repository = RegisterSourcesOc::Repository.new(
+  RegisterIngesterOc::Company,
+  id_digest: false,
+  client: RegisterIngesterOc::Config::ELASTICSEARCH_CLIENT,
+  index: RegisterIngesterOc::Config::ELASTICSEARCH_INDEX_COMPANIES
 )
 
-require 'register_sources_oc/services/bulk_data_company_service'
 bulk_data_company_service = RegisterSourcesOc::Services::BulkDataCompanyService.new(
   company_repository:
 )
 
-require 'register_sources_oc/clients/open_corporate_client'
 open_corporate_client = RegisterSourcesOc::Clients::OpenCorporateClient.new_for_imports
-require 'register_sources_oc/services/oc_api_company_service'
+
 RegisterSourcesOc::Services::OcApiCompanyService.new(
   open_corporate_client:
 )
 
-require 'register_sources_oc/services/company_service'
 company_service = RegisterSourcesOc::Services::CompanyService.new(
   services: [
     { name: 'bulk_data', service: bulk_data_company_service },
