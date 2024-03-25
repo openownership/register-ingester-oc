@@ -3,6 +3,6 @@
 
 require 'bundler/setup'
 
-require 'register_ingester_oc/apps/es_ingestor'
+require 'register_ingester_oc/apps/es_ingester'
 
-RegisterIngesterOc::Apps::EsIngestor.bash_call ARGV
+RegisterIngesterOc::Apps::EsIngester.bash_call ARGV

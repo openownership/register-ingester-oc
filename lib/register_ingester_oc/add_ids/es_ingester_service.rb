@@ -2,23 +2,22 @@
 
 require 'register_sources_oc/repository'
 
-require_relative '../services/es_ingestor_service'
+require_relative '../services/es_ingester_service'
 require_relative 'row_processor'
 
 module RegisterIngesterOc
-  module Companies
-    class EsIngestorService < Services::EsIngestorService
+  module AddIds
+    class EsIngesterService < Services::EsIngesterService
       def initialize(
-        row_processor: Companies::RowProcessor.new,
+        row_processor: AddIds::RowProcessor.new,
         repository: RegisterSourcesOc::Repository.new(
-          RegisterSourcesOc::Company,
-          id_digest: false,
+          RegisterSourcesOc::AddId,
           client: Config::ELASTICSEARCH_CLIENT,
-          index: RegisterSourcesOc::Config::ELASTICSEARCH_INDEX_COMPANIES
+          index: RegisterSourcesOc::Config::ELASTICSEARCH_INDEX_ADD_IDS
         ),
         s3_adapter: Config::Adapters::S3_ADAPTER,
         s3_bucket: ENV.fetch('ATHENA_S3_BUCKET'),
-        full_s3_prefix: ENV.fetch('COMPANIES_EXPORT_JSON_FULL_S3_PREFIX')
+        full_s3_prefix: ENV.fetch('ADD_IDS_EXPORT_JSON_FULL_S3_PREFIX')
       )
         super
       end
