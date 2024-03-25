@@ -8,7 +8,7 @@ require_relative '../config/settings'
 
 module RegisterIngesterOc
   module Services
-    class EsIngestorService
+    class EsIngesterService
       # rubocop:disable Metrics/ParameterLists
       def initialize(
         row_processor:,

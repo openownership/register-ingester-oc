@@ -1,28 +1,28 @@
 # frozen_string_literal: true
 
-require 'register_ingester_oc/apps/es_ingestor'
+require 'register_ingester_oc/apps/es_ingester'
 
-RSpec.describe RegisterIngesterOc::Apps::EsIngestor do
+RSpec.describe RegisterIngesterOc::Apps::EsIngester do
   subject do
     described_class.new(
-      companies_ingestor_service:,
-      alt_names_ingestor_service:,
-      add_ids_ingestor_service:
+      companies_ingester_service:,
+      alt_names_ingester_service:,
+      add_ids_ingester_service:
     )
   end
 
-  let(:companies_ingestor_service) { double 'companies_ingestor_service' }
-  let(:alt_names_ingestor_service) { double 'alt_names_ingestor_service' }
-  let(:add_ids_ingestor_service) { double 'add_ids_ingestor_service' }
+  let(:companies_ingester_service) { double 'companies_ingester_service' }
+  let(:alt_names_ingester_service) { double 'alt_names_ingester_service' }
+  let(:add_ids_ingester_service) { double 'add_ids_ingester_service' }
 
   let(:oc_source) { 'companies' }
   let(:month) { '2022_05' }
 
   describe '#call' do
     before do
-      allow(companies_ingestor_service).to receive(:call)
-      allow(alt_names_ingestor_service).to receive(:call)
-      allow(add_ids_ingestor_service).to receive(:call)
+      allow(companies_ingester_service).to receive(:call)
+      allow(alt_names_ingester_service).to receive(:call)
+      allow(add_ids_ingester_service).to receive(:call)
     end
 
     context 'when oc_source is companies' do
@@ -31,7 +31,7 @@ RSpec.describe RegisterIngesterOc::Apps::EsIngestor do
       it 'calls service with correct params' do
         subject.call(oc_source, month)
 
-        expect(companies_ingestor_service).to have_received(:call).with(month)
+        expect(companies_ingester_service).to have_received(:call).with(month)
       end
     end
 
@@ -41,7 +41,7 @@ RSpec.describe RegisterIngesterOc::Apps::EsIngestor do
       it 'calls service with correct params' do
         subject.call(oc_source, month)
 
-        expect(add_ids_ingestor_service).to have_received(:call).with(month)
+        expect(add_ids_ingester_service).to have_received(:call).with(month)
       end
     end
 
@@ -51,7 +51,7 @@ RSpec.describe RegisterIngesterOc::Apps::EsIngestor do
       it 'calls service with correct params' do
         subject.call(oc_source, month)
 
-        expect(alt_names_ingestor_service).to have_received(:call).with(month)
+        expect(alt_names_ingester_service).to have_received(:call).with(month)
       end
     end
 

@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-require 'register_ingester_oc/services/es_ingestor_service'
+require 'register_ingester_oc/services/es_ingester_service'
 
-RSpec.describe RegisterIngesterOc::Services::EsIngestorService do
+RSpec.describe RegisterIngesterOc::Services::EsIngesterService do
   subject do
     described_class.new(
       row_processor:,
