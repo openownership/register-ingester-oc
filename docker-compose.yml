@@ -44,6 +44,5 @@ services:
       - ./register_ingester_oc.gemspec:/home/x/r/register_ingester_oc.gemspec
       - ./spec:/home/x/r/spec
       - ./storage:/home/x/r/storage
-version: "3.8"
 volumes:
   elasticsearch: {}
