@@ -40,7 +40,7 @@ RSpec.describe RegisterIngesterOc::Companies::ConversionService do
 
       # Inserts into filtered table
       expect(athena_adapter).to receive(:execute_and_wait).with(
-        "INSERT INTO filtered_table_name\nSELECT\n  company_number,\n  name,\n  company_type,\n  incorporation_date,\n  dissolution_date,\n  CASE lower(restricted_for_marketing)\n    WHEN 'true' THEN TRUE\n    WHEN 't' THEN TRUE\n    WHEN 'false' THEN FALSE\n    WHEN 'f' THEN FALSE\n    ELSE NULL\n  END AS restricted_for_marketing,\n  \"registered_address.country\",\n  \"registered_address.in_full\",\n  mth,\n  jurisdiction_code\nFROM processed_table_name\nWHERE mth = '2022_05' AND jurisdiction_code IN ('gb', 'dk');\n", # rubocop:disable Layout/LineLength
+        "INSERT INTO filtered_table_name\nSELECT\n  company_number,\n  name,\n  company_type,\n  incorporation_date,\n  dissolution_date,\n  CASE lower(restricted_for_marketing)\n    WHEN 'true' THEN TRUE\n    WHEN 't' THEN TRUE\n    WHEN 'false' THEN FALSE\n    WHEN 'f' THEN FALSE\n    ELSE NULL\n  END AS restricted_for_marketing,\n  \"registered_address.country\",\n  \"registered_address.in_full\",\n  filter(split(industry_code_uids, '|'), x -> x != '') AS industry_code_uids,\n  mth,\n  jurisdiction_code\nFROM processed_table_name\nWHERE mth = '2022_05' AND jurisdiction_code IN ('gb', 'dk');\n", # rubocop:disable Layout/LineLength
         's3://s3_bucket/athena_results'
       )
 

@@ -6,6 +6,7 @@ require_relative '../config/settings'
 module RegisterIngesterOc
   module Services
     class ExporterService
+      # rubocop:disable Metrics/ParameterLists
       def initialize(
         filtered_table_name:, full_s3_prefix:,
         athena_adapter: Config::Adapters::ATHENA_ADAPTER,
@@ -21,6 +22,7 @@ module RegisterIngesterOc
         @full_s3_prefix = full_s3_prefix
         @athena_sfx = athena_sfx
       end
+      # rubocop:enable Metrics/ParameterLists
 
       def call(month)
         export_all_json month
