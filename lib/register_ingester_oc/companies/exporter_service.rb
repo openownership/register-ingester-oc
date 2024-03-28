@@ -51,7 +51,7 @@ module RegisterIngesterOc
       end
 
       def export_json_diffs(month)
-        dst_table_name = "oc_export_diff_#{month}"
+        dst_table_name = "oc_export_diff_#{month}#{@athena_sfx}"
         dst_s3_location = s3_export_location_diffs(month)
         prev_month = calc_prev_month month
 

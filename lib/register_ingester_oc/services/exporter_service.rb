@@ -10,7 +10,8 @@ module RegisterIngesterOc
         filtered_table_name:, full_s3_prefix:,
         athena_adapter: Config::Adapters::ATHENA_ADAPTER,
         athena_database: ENV.fetch('ATHENA_DATABASE'),
-        s3_bucket: ENV.fetch('ATHENA_S3_BUCKET')
+        s3_bucket: ENV.fetch('ATHENA_S3_BUCKET'),
+        athena_sfx: ENV.fetch('ATHENA_TABLE_SFX', '')
       )
         @athena_adapter = athena_adapter
         @athena_database = athena_database
@@ -18,6 +19,7 @@ module RegisterIngesterOc
         @output_location = "s3://#{s3_bucket}/athena_results"
         @filtered_table_name = filtered_table_name
         @full_s3_prefix = full_s3_prefix
+        @athena_sfx = athena_sfx
       end
 
       def call(month)
@@ -33,7 +35,7 @@ module RegisterIngesterOc
       attr_reader :athena_adapter, :athena_database, :s3_bucket, :output_location, :filtered_table_name, :full_s3_prefix
 
       def export_all_json(month)
-        dst_table_name = "oc_export_full_#{month}"
+        dst_table_name = "oc_export_full_#{month}#{@athena_sfx}"
         dst_s3_location = s3_export_location_full(month)
 
         query = <<~SQL
