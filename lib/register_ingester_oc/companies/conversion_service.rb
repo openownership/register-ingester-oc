@@ -43,6 +43,7 @@ module RegisterIngesterOc
             END AS restricted_for_marketing,
             "registered_address.country",
             "registered_address.in_full",
+            filter(split(industry_code_uids, '|'), x -> x != '') AS industry_code_uids,
             mth,
             jurisdiction_code
           FROM #{src_table_name}
