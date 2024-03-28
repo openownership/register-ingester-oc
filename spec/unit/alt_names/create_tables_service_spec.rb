@@ -40,10 +40,10 @@ RSpec.describe RegisterIngesterOc::AltNames::CreateTablesService do
         end_date STRING
 
         )
-          PARTITIONED BY (`mth` STRING, `part` STRING)
-          ROW FORMAT SERDE 'org.apache.hadoop.hive.serde2.OpenCSVSerde'
-          WITH SERDEPROPERTIES ("escapeChar"= "¬")
-          LOCATION 's3://s3_bucket//bulk';
+        PARTITIONED BY (`mth` STRING, `part` STRING)
+        ROW FORMAT SERDE 'org.apache.hadoop.hive.serde2.OpenCSVSerde'
+        WITH SERDEPROPERTIES ("escapeChar"= "¬")
+        LOCATION 's3://s3_bucket//bulk';
       SQL
       create_raw_execution_id = double 'create_raw_execution_id'
       create_raw_execution = double 'create_raw', query_execution_id: create_raw_execution_id
