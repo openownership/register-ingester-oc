@@ -2,7 +2,7 @@
 
 require_relative '../config/adapters'
 require_relative '../config/settings'
-require_relative '../services/es_ingester_service'
+require_relative '../services/conversion_service'
 
 module RegisterIngesterOc
   module Companies
