@@ -30,7 +30,8 @@ module RegisterIngesterOc
           dissolution_date: row[:dissolution_date],
           restricted_for_marketing: row[:restricted_for_marketing],
           registered_address_in_full:,
-          registered_address_country:
+          registered_address_country:,
+          industry_code_uids: row[:industry_code_uids]
         )
       end
       # rubocop:enable Metrics/CyclomaticComplexity

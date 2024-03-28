@@ -15,7 +15,8 @@ RSpec.describe RegisterIngesterOc::Companies::RowProcessor do
       dissolution_date: '2022-04-01',
       restricted_for_marketing: nil,
       'registered_address.in_full': 'registered address',
-      'registered_address.country': 'country'
+      'registered_address.country': 'country',
+      industry_code_uids: []
     }
   end
 
@@ -30,7 +31,8 @@ RSpec.describe RegisterIngesterOc::Companies::RowProcessor do
         dissolution_date: '2022-04-01',
         restricted_for_marketing: nil,
         registered_address_in_full: 'registered address',
-        registered_address_country: 'country'
+        registered_address_country: 'country',
+        industry_code_uids: []
       )
     end
 

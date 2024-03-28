@@ -37,7 +37,8 @@ module RegisterIngesterOc
             dissolution_date STRING,
             restricted_for_marketing BOOLEAN,
             `registered_address.country` STRING,
-            `registered_address.in_full` STRING
+            `registered_address.in_full` STRING,
+            industry_code_uids ARRAY<STRING>
           )
           PARTITIONED BY (`mth` STRING, `jurisdiction_code` STRING)
           ROW FORMAT SERDE
